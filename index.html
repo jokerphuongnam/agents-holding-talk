@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents Holding</title>
+<style>
+  :root {
+    --bg: #070b0a;
+    --stage: #101614;
+    --ink: #f4f0e6;
+    --dim: #9aa398;
+    --mute: #6d756c;
+    --green: #c6f26d;
+    --amber: #e7a15a;
+    --line: rgba(244,240,230,.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); }
+  body { font-family: "Avenir Next", "Segoe UI", sans-serif; overflow: hidden; }
+  .stage {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 1600px; height: 900px;
+    transform: translate(-50%, -50%) scale(var(--s, 1));
+    background: var(--stage);
+    overflow: hidden;
+  }
+  .stage::before {
+    content: "";
+    position: absolute; left: 0; top: 0; height: 8px; width: var(--p, 0%);
+    background: var(--green); z-index: 2;
+  }
+  .slide { display: none; height: 100%; padding: 72px 88px 88px; position: relative; }
+  .slide.on { display: block; }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    font-size: 18px; letter-spacing: .18em; color: var(--green); margin: 0 0 28px;
+  }
+  h1 {
+    font-family: Georgia, "Iowan Old Style", serif;
+    font-weight: 400; font-size: 108px; line-height: .95; margin: 0; letter-spacing: -1px;
+  }
+  h2 {
+    font-family: Georgia, "Iowan Old Style", serif;
+    font-weight: 400; font-size: 64px; line-height: 1.05; margin: 0 0 36px; max-width: 1300px;
+  }
+  .lead { font-size: 34px; line-height: 1.35; max-width: 1100px; margin: 36px 0 0; color: var(--ink); }
+  .dim { color: var(--dim); }
+  .mono { font-family: ui-monospace, Consolas, monospace; }
+  .footer {
+    position: absolute; left: 88px; right: 88px; bottom: 36px;
+    display: flex; justify-content: space-between;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 16px; letter-spacing: .08em; color: var(--mute);
+  }
+  .rule { height: 1px; background: var(--line); margin: 28px 0; }
+  .cols { display: grid; gap: 28px; }
+  .c3 { grid-template-columns: 1fr 1fr 1fr; }
+  .c2 { grid-template-columns: 1fr 1fr; }
+  .block h3 { margin: 0 0 12px; font-size: 28px; font-weight: 600; }
+  .block p { margin: 0; font-size: 24px; line-height: 1.4; color: var(--dim); }
+  .idx { font-family: Georgia, serif; font-size: 42px; color: var(--green); display: block; margin-bottom: 12px; }
+  .stat { font-family: Georgia, serif; font-size: 92px; line-height: .9; margin: 0; }
+  .bench { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 64px; margin-top: 56px; }
+  .bench-k { margin: 28px 0 0; font-size: 22px; letter-spacing: .16em; text-transform: uppercase; color: var(--green); }
+  .bench-n { margin: 14px 0 0; font-family: Georgia, serif; font-size: 44px; line-height: 1.1; color: var(--ink); }
+  .bench-vs { margin: 8px 0 0; font-size: 32px; line-height: 1.25; color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 28px; }
+  th { text-align: left; font-weight: 500; color: var(--mute); font-size: 16px; letter-spacing: .14em; padding: 0 0 16px; }
+  td { padding: 18px 16px 18px 0; border-top: 1px solid var(--line); vertical-align: baseline; }
+  td.n { font-family: Georgia, serif; font-size: 34px; }
+  td.win { color: var(--green); }
+  .cmd {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 26px; color: var(--green); margin: 0 0 8px;
+  }
+  .launch { margin: 0 0 22px; }
+  .launch .cmd { font-size: 30px; margin: 0 0 6px; }
+  .launch p { margin: 0; font-size: 26px; color: var(--ink); }
+  .term {
+    margin-top: 18px; background: #07110e; border: 1px solid #2c3a32; border-radius: 12px;
+    overflow: hidden; font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+  .term-bar {
+    display: flex; gap: 8px; align-items: center; padding: 12px 16px;
+    background: #121c18; color: var(--mute); font-size: 16px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .term-body { padding: 18px 22px 22px; font-size: 22px; line-height: 1.45; }
+  .term-body .ps { color: var(--green); }
+  .term-body .dimline { color: var(--dim); }
+  .pick { color: var(--ink); }
+  .pick.on { background: #e8f5d8; color: #10210c; display: block; margin: 0 -8px; padding: 0 8px; }
+  .path { font-family: ui-monospace, Consolas, monospace; font-size: 26px; color: var(--green); }
+  .rowline { display: grid; grid-template-columns: 340px 1fr; gap: 24px; padding: 16px 0; border-top: 1px solid var(--line); font-size: 26px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 20px; }
+  .step { border-top: 3px solid var(--green); padding-top: 18px; }
+  .step b { display: block; font-size: 26px; margin-bottom: 10px; }
+  .step span { color: var(--dim); font-size: 22px; line-height: 1.35; display: block; }
+  .giant { font-family: Georgia, serif; font-size: 78px; line-height: 1.05; margin: 80px 0 0; }
+  .agenda { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 56px; margin-top: 28px; }
+  .agenda div { border-top: 2px solid var(--green); padding-top: 12px; }
+  .agenda b { display: block; font-size: 28px; font-weight: 600; margin-bottom: 4px; }
+  .agenda span { display: block; font-size: 22px; color: var(--dim); }
+  .note { position: absolute; left: 88px; right: 88px; bottom: 86px; color: var(--mute); font-size: 20px; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+<script>
+const slides = [
+  () => `
+    <p class="kicker">AGENTS HOLDING  ·  7 MỤC  ·  3 LẦN DEMO  ·  DỪNG Ở KẾT</p>
+    <h1 style="font-size:56px">Một công ty cho mỗi sản phẩm.</h1>
+    <div class="agenda">
+      <div><b>01  Vì sao có</b><span>Một chat không giữ được một sản phẩm.</span></div>
+      <div><b>02  Hiệu quả  ·  demo</b><span>Skill gắn sẵn trên staff. Rồi mở thẻ người đó.</span></div>
+      <div><b>03  Số đo thật</b><span>Hai lần bench Todo. Token chỉ là hệ quả.</span></div>
+      <div><b>04  Dựng và mở  ·  demo</b><span>--continue liệt kê phòng. BA vào đúng phòng.</span></div>
+      <div><b>05  Một lượt việc  ·  demo</b><span>Một câu cho CEO. Plan có điểm dừng.</span></div>
+      <div><b>06  Bổ trợ, hạn chế, sắp tới</b><span>App Mac chạy chưa ổn. Context lâu, grok trần, chỉ hai kênh nói. Sau này: Jev và script.</span></div>
+      <div><b>07  Kết</b><span>Bài dừng sau hạn chế context lâu.</span></div>
+    </div>
+    <p class="footer"><span>THUYẾT TRÌNH KỸ THUẬT</span><span>01</span></p>`,
+  () => `
+    <p class="kicker">01  /  VÌ SAO CÓ</p>
+    <h2>Một chat không giữ được một sản phẩm.</h2>
+    <div class="cols c3">
+      <div class="block"><span class="idx">01</span><h3>Vai trộn</h3><p>Cùng một phiên hỏi, viết plan, rồi sửa code. Không còn người chịu trách nhiệm từng phần.</p></div>
+      <div class="block"><span class="idx">02</span><h3>Chia mà không có tổ chức</h3><p>Nhiều agent chạy song song, không CEO, không plan, không phòng. Mỗi bước lại phải chọn skill.</p></div>
+      <div class="block"><span class="idx">03</span><h3>Nhiều sản phẩm</h3><p>Mỗi repo là một công ty. Holding tuyển người và nối các công ty. Sản phẩm không tự thuê staff.</p></div>
+    </div>
+    <p class="footer"><span>VÌ SAO CÓ</span><span>02</span></p>`,
+  () => `
+    <p class="kicker">02  /  TÁC DỤNG</p>
+    <h2>Làm project hiệu quả hơn. Không phải để tiết kiệm token.</h2>
+    <div class="cols c2" style="margin-top:20px">
+      <div class="block"><h3>Đúng một người</h3><p>Mỗi staff chỉ một số việc. CEO giao. PO viết plan. Kỹ sư xây. QC kiểm.</p></div>
+      <div class="block"><h3>Skill đã gắn sẵn</h3><p>PO có sẵn skill của PO. Chat sau không chọn lại trong cả kho skill.</p></div>
+      <div class="block"><h3>Thiếu thì thêm</h3><p>Skill mới gắn vào đúng người. Không nhét vào một danh sách chung.</p></div>
+      <div class="block"><h3>Dừng được</h3><p>Final expect là trạng thái kiểm được. Plan và phòng nằm trên đĩa.</p></div>
+    </div>
+    <p class="footer"><span>TÁC DỤNG</span><span>03</span></p>`,
+  () => `
+    <p class="kicker">03  /  SKILL THEO NGƯỜI</p>
+    <h2>Ngày trước chọn skill mỗi bước. Giờ staff giữ sẵn.</h2>
+    <div class="cols c2" style="gap:64px;margin-top:24px">
+      <div>
+        <p class="bench-k">Không dùng staff</p>
+        <p class="lead" style="font-size:32px;margin-top:18px">100 skill. 10 skill cho PO. Viết plan thì phải tìm trong 100 skill. Bước sau lại chọn lại.</p>
+      </div>
+      <div>
+        <p class="bench-k">Agents Holding</p>
+        <p class="lead" style="font-size:32px;margin-top:18px">Mỗi staff một việc và một bộ skill đã setup. Không nạp lại sau mỗi lần chat. Thiếu thì làm thêm cho đúng người.</p>
+      </div>
+    </div>
+    <p class="footer"><span>SKILL THEO NGƯỜI</span><span>04</span></p>`,
+  () => `
+    <p class="kicker">DEMO  1 / 3</p>
+    <h2 style="font-size:46px;margin-bottom:8px">Mở thẻ. Người này chỉ viết plan.</h2>
+    <div class="term">
+      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>po-new.md</span></div>
+      <div class="term-body">
+        <div><span class="ps">$</span> sed -n '1,16p' system/staffs/po/po-new.md</div>
+        <div class="dimline">name: po-new</div>
+        <div class="dimline">description: Create one new plan file under cache/plans/.</div>
+        <div style="margin-top:10px">Role — po-new. Create one new plan. You do not edit an existing plan and you do not code.</div>
+        <div class="dimline" style="margin-top:10px">Out of scope: stop and return it to po-lead.</div>
+      </div>
+    </div>
+    <p class="footer"><span>DEMO · SKILL</span><span>05</span></p>`,
+  () => `
+    <p class="kicker">06  /  BENCH THẬT  ·  V3</p>
+    <h2 style="font-size:46px;margin-bottom:8px">Cùng điểm. Ít token là hệ quả, không phải mục tiêu.</h2>
+    <div class="bench">
+      <div>
+        <p class="stat">−27%</p>
+        <p class="bench-k">Token</p>
+        <p class="bench-n">478.849</p>
+        <p class="bench-vs">so với 657.966</p>
+      </div>
+      <div>
+        <p class="stat">−35%</p>
+        <p class="bench-k">Thời gian</p>
+        <p class="bench-n">159 giây</p>
+        <p class="bench-vs">so với 244 giây</p>
+      </div>
+      <div>
+        <p class="stat">39<span style="color:var(--dim)">/40</span></p>
+        <p class="bench-k">Điểm</p>
+        <p class="bench-n">Đậu cả hai</p>
+        <p class="bench-vs">Chat thường test dày hơn</p>
+      </div>
+    </div>
+    <p class="footer"><span>BENCH V3</span><span>06</span></p>`,
+  () => `
+    <p class="kicker">07  /  BENCH THẬT  ·  V1</p>
+    <h2>Ba cách làm. Một lần chạm đủ tiêu chí.</h2>
+    <table>
+      <thead><tr><th>CÁCH LÀM</th><th>ĐIỂM</th><th>TOKEN</th></tr></thead>
+      <tbody>
+        <tr><td>Một chat</td><td class="n">25/40</td><td class="n">292.524</td></tr>
+        <tr><td>Subagent không tổ chức</td><td class="n">36/40</td><td class="n">2.405.094</td></tr>
+        <tr><td>Agents Holding</td><td class="n win">40/40</td><td class="n win">470.075</td></tr>
+      </tbody>
+    </table>
+    <p class="dim" style="margin-top:28px;font-size:26px">Case 3 chạy grok-4.5, effort low. Hai case kia là grok-4.6, effort medium. Subagent tốn khoảng năm lần token.</p>
+    <p class="footer"><span>BENCH V1</span><span>07</span></p>`,
+  () => `
+    <p class="kicker">08  /  DỰNG</p>
+    <h2>Bốn bước, một repo. Harness là lựa chọn.</h2>
+    <div class="steps">
+      <div class="step"><b>Cài holding</b><span>agents-holding vào ~/.agents. Chỉ holding tạo công ty.</span></div>
+      <div class="step"><b>create-company</b><span>--project-root là repo. --tech theo stack đang dùng.</span></div>
+      <div class="step"><b>company_os.sh all</b><span>Sinh staff, skill, harness, launch.sh.</span></div>
+      <div class="step"><b>Mở CEO</b><span>Đứng ở gốc repo. Câu đầu đi vào launch.sh và harness đã chọn.</span></div>
+    </div>
+    <div class="steps" style="margin-top:48px">
+      <div class="step"><b>grok</b><span>Cả phiên một agent.</span></div>
+      <div class="step"><b>claude</b><span>Cả phiên một agent.</span></div>
+      <div class="step"><b>codex</b><span>Cả phiên một agent.</span></div>
+      <div class="step"><b>merge</b><span>Mỗi staff một agent, theo runtime_router.toml.</span></div>
+    </div>
+    <p class="footer"><span>DỰNG CÔNG TY</span><span>08</span></p>`,
+  () => `
+    <p class="kicker">09  /  ĐIỂM MẠNH</p>
+    <h2>Công ty nằm cạnh repo. Không nằm trong commit.</h2>
+    <div class="cols c2" style="gap:56px;margin-top:12px">
+      <div>
+        <p class="bench-k">Ngày trước</p>
+        <p class="lead" style="font-size:30px;margin-top:16px">Muốn làm với một project thì phải setup trong chính project đó, rồi tự canh để không push.</p>
+      </div>
+      <div>
+        <p class="bench-k">Agents Holding</p>
+        <p class="path" style="display:block;margin-top:18px;font-size:28px;line-height:1.45">Project/<br>├ Company và file generate<br>└ Project thực tế/<br>&nbsp;&nbsp;&nbsp;├ code<br>&nbsp;&nbsp;&nbsp;└ agent của từng người</p>
+        <p class="dim" style="font-size:26px;margin-top:18px">Agent của mỗi người khác nhau, và không được commit.</p>
+      </div>
+    </div>
+    <p class="footer"><span>TÁCH KHỎI GIT</span><span>09</span></p>`,
+  () => `
+    <p class="kicker">10  /  TRÊN ĐĨA</p>
+    <h2>Công ty nằm trong .agents.</h2>
+    <div>
+      <div class="rowline"><span class="path">launch.sh</span><span>Cửa vào. Mặc định CEO. --agent ba-user mở BA.</span></div>
+      <div class="rowline"><span class="path">system/staffs</span><span>Thẻ từng vai. Phiên mở bằng đúng thẻ đó.</span></div>
+      <div class="rowline"><span class="path">system/install</span><span>role_gate, plan_history, context_reload.</span></div>
+      <div class="rowline"><span class="path">cache/plans</span><span>Plan Markdown. Chủ là dòng owner:.</span></div>
+      <div class="rowline"><span class="path">cache/work-history</span><span>Phòng là nhánh room/. Lời nói nằm ở talk/.</span></div>
+    </div>
+    <p class="footer"><span>TRÊN ĐĨA</span><span>10</span></p>`,
+  () => `
+    <p class="kicker">11  /  MỞ PHIÊN</p>
+    <h2 style="font-size:48px;margin-bottom:20px">Đứng ở repo. Gọi launch.sh.</h2>
+    <div class="launch">
+      <p class="cmd">./launch.sh &lt;harness&gt; --continue</p>
+      <p>Không kèm tên phòng: hiện danh sách phòng đã lưu. Mũi tên chọn, Enter vào.</p>
+    </div>
+    <div class="launch">
+      <p class="cmd">./launch.sh &lt;harness&gt; --continue &lt;phòng&gt;</p>
+      <p>Vào đúng phòng đó và phiên đã gắn. Thư mục làm việc vẫn là repo.</p>
+    </div>
+    <div class="launch">
+      <p class="cmd">./launch.sh &lt;harness&gt; --room-name &lt;phòng&gt; --agent ba-user "…"</p>
+      <p>BA hỏi trong cùng phòng CEO. Thiếu tên phòng thì lệnh dừng, không tạo phòng mới.</p>
+    </div>
+    <p class="dim" style="margin-top:18px;font-size:24px">Harness là grok, claude, codex, hoặc merge. Mặc định là CEO.</p>
+    <p class="footer"><span>MỞ PHIÊN</span><span>11</span></p>`,
+  () => `
+    <p class="kicker">DEMO  2 / 3</p>
+    <h2 style="font-size:46px;margin-bottom:8px">--continue mở đúng danh sách phòng này.</h2>
+    <div class="term">
+      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>shop — zsh</span></div>
+      <div class="term-body">
+        <div><span class="ps">$</span> ./launch.sh grok --continue</div>
+        <div class="dimline">↑ lên &nbsp;&nbsp; ↓ xuống &nbsp;&nbsp; Enter chọn &nbsp;&nbsp; Ctrl+C exit</div>
+        <div class="pick on">&gt; 2 hours ago &nbsp; empty-state</div>
+        <div class="pick"> &nbsp; yesterday &nbsp; checkout</div>
+        <div class="pick"> &nbsp; 3 days ago &nbsp; shop-20261101-091500</div>
+        <div class="pick"> &nbsp; 1 week ago &nbsp; onboarding</div>
+        <div class="dimline" style="margin-top:12px">[launch] resume empty-state</div>
+      </div>
+    </div>
+    <p class="dim" style="margin-top:14px;font-size:22px">Dữ liệu giả. Enter vào phòng đang chọn. BA cùng phòng: ./launch.sh grok --room-name empty-state --agent ba-user "…"</p>
+    <p class="footer"><span>DEMO · PHÒNG</span><span>12</span></p>`,
+  () => `
+    <p class="kicker">13  /  CỔNG VAI</p>
+    <h2>Launch gắn cổng. grok trần thì chưa.</h2>
+    <div class="cols c2" style="margin-top:28px">
+      <div class="block"><h3>CEO và lead</h3><p>Chỉ giao. Hook chặn sửa file và một chuỗi lệnh.</p></div>
+      <div class="block"><h3>PO</h3><p>Chỉ ghi cache/plans, rồi plan_history.py sync.</p></div>
+      <div class="block"><h3>Kỹ sư</h3><p>Sửa code sản phẩm. Không ghi plan.</p></div>
+      <div class="block"><h3>Hỏi người dùng</h3><p>Lựa chọn thuộc ba-user. CEO chuyển việc sang đó.</p></div>
+    </div>
+    <p class="footer"><span>CỔNG VAI</span><span>13</span></p>`,
+  () => `
+    <p class="kicker">14  /  MỘT CÂU ĐI ĐÂU</p>
+    <h2>CEO đọc cache, giao một người.</h2>
+    <table>
+      <thead><tr><th>VIỆC</th><th>QUA</th><th>ĐẾN</th></tr></thead>
+      <tbody>
+        <tr><td>Làm rõ</td><td>ba-lead</td><td class="win">ba-user</td></tr>
+        <tr><td>Plan mới / sửa plan</td><td>po-lead</td><td class="win">po-new / po-modify</td></tr>
+        <tr><td>Xây</td><td>tech-lead</td><td class="win">một kỹ sư</td></tr>
+        <tr><td>Kiểm / kiến trúc</td><td>qc-lead / cto</td><td class="win">user-qc / tech-lead</td></tr>
+      </tbody>
+    </table>
+    <p class="footer"><span>ĐIỀU PHỐI</span><span>14</span></p>`,
+  () => `
+    <p class="kicker">15  /  PLAN</p>
+    <h2>Ba mục. Đúng thứ tự. Có điểm dừng.</h2>
+    <div class="cols c3">
+      <div class="block"><span class="idx">Problem</span><p>Vì sao plan tồn tại. Thiếu gì, và phần đã có mà giải pháp phải khớp.</p></div>
+      <div class="block"><span class="idx">Work</span><p>Ai làm, đường dẫn nào, điều kiện chấp nhận từng phần.</p></div>
+      <div class="block"><span class="idx">Final expect</span><p>Trạng thái cuối kiểm được. Kỹ sư dừng khi mọi dòng đúng.</p></div>
+    </div>
+    <p class="note mono" style="color:var(--green)">plan_history.py sync --company . --actor po-new</p>
+    <p class="footer"><span>PLAN</span><span>15</span></p>`,
+  () => `
+    <p class="kicker">DEMO  3 / 3</p>
+    <h2 style="font-size:46px;margin-bottom:8px">Một câu cho CEO. File plan có điểm dừng.</h2>
+    <div class="term">
+      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>cache/plans</span></div>
+      <div class="term-body">
+        <div><span class="ps">$</span> ./launch.sh grok --continue empty-state "việc cần plan"</div>
+        <div class="dimline">[launch] agent=ceo room=empty-state</div>
+        <div style="margin-top:12px"><span class="ps">$</span> sed -n '1,20p' cache/plans/&lt;plan&gt;.md</div>
+        <div>## Problem</div>
+        <div>## Work</div>
+        <div>## Final expect</div>
+        <div class="dimline">python3 system/install/plan_history.py sync --company . --actor po-new</div>
+      </div>
+    </div>
+    <p class="footer"><span>DEMO · PLAN</span><span>16</span></p>`,
+  () => `
+    <p class="kicker">17  /  PHÒNG</p>
+    <h2>Phòng đã chiếu ở demo. Thư mục làm việc vẫn là repo.</h2>
+    <p class="lead">--continue và --resume là cùng một cửa. Không lấy chat mới nhất của repo. BA và app Mac dùng tên phòng vừa chọn.</p>
+    <p class="footer"><span>PHÒNG</span><span>17</span></p>`,
+  () => `
+    <p class="kicker">18  /  CÔNG TY KHÁC</p>
+    <h2>Hop bằng launch của nơi nhận việc.</h2>
+    <div class="rowline"><span>Cha sang con</span><span class="mono" style="color:var(--green)">launch.sh grok &lt;con&gt; "mục tiêu ngắn"</span></div>
+    <div class="rowline"><span>Con sang cha</span><span>CEO con gọi launch.sh của cha.</span></div>
+    <div class="rowline"><span>Công ty không họ</span><span>CEO đang mở, rồi holding-ceo, rồi launch của đích.</span></div>
+    <div class="rowline"><span>Thuê người</span><span>holding-hr. CEO sản phẩm không tự thuê.</span></div>
+    <p class="footer"><span>GIỮA CÁC CÔNG TY</span><span>18</span></p>`,
+  () => `
+    <p class="kicker">19  /  APP MAC  ·  ĐÃ CÓ, CHẠY CHƯA ỔN</p>
+    <h2>App đã có. Cửa sổ nhìn công ty, chạy chưa ổn.</h2>
+    <div class="cols c2" style="margin-top:12px">
+      <div class="block"><h3>Nhân sự</h3><p>Mở từng người. Skill và script nằm trên thẻ người đó.</p></div>
+      <div class="block"><h3>Plan theo chủ</h3><p>Plan hiện trên PO được ghi ở dòng owner:. Canvas công ty không liệt kê plan.</p></div>
+      <div class="block"><h3>Sửa tại chỗ</h3><p>Mở file plan, skill, script. Lưu đè đúng file đó. App không giữ bản sao.</p></div>
+      <div class="block"><h3>Mở phòng</h3><p>App gọi launch của công ty, kèm tên phòng. Thư mục làm việc vẫn là repo.</p></div>
+    </div>
+    <p class="footer"><span>APP MAC</span><span>19</span></p>`,
+  () => `
+    <p class="kicker">20  /  SẮP TỚI</p>
+    <h2>Hai việc sẽ làm thêm để đỡ đốt token.</h2>
+    <div class="cols c2" style="gap:56px;margin-top:28px">
+      <div>
+        <p class="bench-k">Jev</p>
+        <p class="lead" style="font-size:32px;margin-top:16px">Dùng Jev để tối ưu token. Chưa có trong bản đang chạy. Là việc sắp làm.</p>
+      </div>
+      <div>
+        <p class="bench-k">Thêm script</p>
+        <p class="lead" style="font-size:32px;margin-top:16px">Việc lặp đưa vào script trên đúng staff. Model không phải làm lại bước đó trong chat.</p>
+      </div>
+    </div>
+    <p class="footer"><span>SẮP TỚI</span><span>20</span></p>`,
+  () => `
+    <p class="kicker">21  /  HẠN CHẾ</p>
+    <h2 style="font-size:48px">Bốn giới hạn đang có.</h2>
+    <div class="cols c2" style="margin-top:8px">
+      <div class="block"><h3>Context lâu</h3><p>CEO tự làm việc thay vì phân việc. Mở lại phòng, đừng kéo một phiên thật dài.</p></div>
+      <div class="block"><h3>Grok trần</h3><p>Mở grok trong repo không gắn cổng vai. Phải vào bằng launch.sh.</p></div>
+      <div class="block"><h3>Hai kênh nói</h3><p>Phòng chỉ có CEO và BA. Kỹ sư, PO, QC là người được giao, không phải một cuộc chat riêng.</p></div>
+      <div class="block"><h3>BA và tuyển người</h3><p>BA cần tên phòng CEO đã có. Công ty không tự thuê staff. Việc đó qua holding-hr.</p></div>
+    </div>
+    <p class="footer"><span>HẠN CHẾ</span><span>21</span></p>`,
+  () => `
+    <p class="kicker">22  /  KẾT</p>
+    <p class="giant">Mở repo.<br>Về phòng.<br>Nói một câu.</p>
+    <p class="lead dim">CEO giao một người. Context lâu thì mở lại phòng, không để CEO tự làm.</p>
+    <p class="footer"><span>AGENTS HOLDING</span><span>22</span></p>`
+];
+
+const stage = document.getElementById("stage");
+slides.forEach((fn) => {
+  const el = document.createElement("section");
+  el.className = "slide";
+  el.innerHTML = fn();
+  stage.appendChild(el);
+});
+let i = 0;
+function fit() {
+  const s = Math.min(innerWidth / 1600, innerHeight / 900);
+  stage.style.setProperty("--s", String(s));
+}
+function show(n) {
+  i = (n + slides.length) % slides.length;
+  [...stage.children].forEach((el, k) => el.classList.toggle("on", k === i));
+  stage.style.setProperty("--p", ((i + 1) / slides.length * 100) + "%");
+  history.replaceState(null, "", "#" + (i + 1));
+}
+addEventListener("resize", fit);
+addEventListener("keydown", (e) => {
+  if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+  else if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+  else if (e.key === "Home") show(0);
+  else if (e.key === "End") show(slides.length - 1);
+  else if (e.key === "f") document.documentElement.requestFullscreen?.();
+});
+addEventListener("click", (e) => {
+  if (e.clientX > innerWidth * 0.72) show(i + 1);
+  else if (e.clientX < innerWidth * 0.28) show(i - 1);
+});
+addEventListener("hashchange", () => {
+  const n = parseInt(location.hash.slice(1), 10);
+  if (Number.isFinite(n)) show(n - 1);
+});
+fit();
+const start = parseInt(location.hash.slice(1), 10);
+show(Number.isFinite(start) ? start - 1 : 0);
+</script>
+</body>
+</html>

@@ -114,9 +114,9 @@ const slides = [
     <p class="kicker">AGENTS HOLDING  ·  7 MỤC  ·  3 LẦN DEMO  ·  DỪNG Ở KẾT</p>
     <h1 style="font-size:56px">Một công ty cho mỗi sản phẩm.</h1>
     <div class="agenda">
-      <div><b>01  Vì sao có</b><span>Để mỗi vai làm đúng việc. Điểm sản phẩm không cao hơn trên bench mới nhất.</span></div>
+      <div><b>01  Vì sao có</b><span>Ưu và nhược lấy từ hai lần bench Todo, không nói suông.</span></div>
       <div><b>02  Hiệu quả  ·  demo</b><span>Skill gắn sẵn trên staff. Rồi mở thẻ người đó.</span></div>
-      <div><b>03  Số đo thật</b><span>Hai lần bench Todo. Token chỉ là hệ quả.</span></div>
+      <div><b>03  Số đo thật</b><span>v3 hòa 39/40. v1 khác model, chỉ dùng để so token.</span></div>
       <div><b>04  Dựng và mở  ·  demo</b><span>--continue liệt kê phòng. BA vào đúng phòng.</span></div>
       <div><b>05  Một lượt việc  ·  demo</b><span>Một câu cho CEO. Plan có điểm dừng.</span></div>
       <div><b>06  Bổ trợ, hạn chế, sắp tới</b><span>App Mac chạy chưa ổn. Context lâu, grok trần, chỉ hai kênh nói. Sau này: Jev và script.</span></div>
@@ -124,27 +124,34 @@ const slides = [
     </div>
     <p class="footer"><span>THUYẾT TRÌNH KỸ THUẬT</span><span>01</span></p>`,
   () => `
-    <p class="kicker">01  /  VÌ SAO CÓ</p>
-    <h2>Có để làm đúng việc. Không phải để điểm cao hơn.</h2>
-    <div class="cols c3">
-      <div class="block"><span class="idx">01</span><h3>Một chat</h3><p>Một phiên làm hết. Ít người hơn. Vai trộn, không có điểm dừng.</p></div>
-      <div class="block"><span class="idx">02</span><h3>Công ty</h3><p>Mỗi vai một việc và một bộ skill. Token lúc hơn, lúc kém, tùy lần đo.</p></div>
-      <div class="block"><span class="idx">03</span><h3>Bench mới nhất</h3><p>Cùng câu Todo: hòa 39/40. App không tốt hơn. Chat có test giao diện dày hơn.</p></div>
-    </div>
+    <p class="kicker">01  /  ƯU  ·  CÓ SỐ</p>
+    <h2>Cùng câu Todo, v3. Nhanh hơn, ít token hơn, điểm hòa.</h2>
+    <table>
+      <thead><tr><th></th><th>CHAT THƯỜNG</th><th>COMPANY OS</th></tr></thead>
+      <tbody>
+        <tr><td>Điểm</td><td class="n">39/40</td><td class="n">39/40</td></tr>
+        <tr><td>Token</td><td class="n">657.966</td><td class="n win">478.849 · −27%</td></tr>
+        <tr><td>Thời gian</td><td class="n">244 giây</td><td class="n win">159 giây · −35%</td></tr>
+        <tr><td>API, React, chạy, thư viện</td><td class="n">5/5 mỗi mục</td><td class="n">5/5 mỗi mục</td></tr>
+      </tbody>
+    </table>
     <p class="footer"><span>VÌ SAO CÓ</span><span>02</span></p>`,
   () => `
-    <p class="kicker">02  /  TÁC DỤNG</p>
-    <h2>Làm project hiệu quả hơn. Không phải để tiết kiệm token.</h2>
-    <div class="cols c2" style="margin-top:20px">
-      <div class="block"><h3>Đúng một người</h3><p>Mỗi staff chỉ một số việc. CEO giao. PO viết plan. Kỹ sư xây. QC kiểm.</p></div>
-      <div class="block"><h3>Skill đã gắn sẵn</h3><p>PO có sẵn skill của PO. Chat sau không chọn lại trong cả kho skill.</p></div>
-      <div class="block"><h3>Thiếu thì thêm</h3><p>Skill mới gắn vào đúng người. Không nhét vào một danh sách chung.</p></div>
-      <div class="block"><h3>Dừng được</h3><p>Final expect là trạng thái kiểm được. Plan và phòng nằm trên đĩa.</p></div>
-    </div>
-    <p class="footer"><span>TÁC DỤNG</span><span>03</span></p>`,
+    <p class="kicker">02  /  NHƯỢC  ·  CÓ SỐ</p>
+    <h2>Nhược là test mỏng hơn. Token hơn một chat ở lần v1.</h2>
+    <table>
+      <thead><tr><th></th><th>CHAT THƯỜNG</th><th>COMPANY OS</th></tr></thead>
+      <tbody>
+        <tr><td>Test giao diện</td><td class="n win">12 test · mục 5/5</td><td class="n">1 test · mục 4/5</td></tr>
+        <tr><td>Test backend</td><td class="n">8 test · mục 5/5</td><td class="n">2 test · mục 5/5</td></tr>
+        <tr><td>v1 so với một chat</td><td class="n">292.524 token · 25/40</td><td class="n">470.075 · 1,6× · 40/40</td></tr>
+        <tr><td>v1 so với subagent</td><td class="n">2.405.094 · 36/40</td><td class="n win">470.075 · 0,20× · 40/40</td></tr>
+      </tbody>
+    </table>
+    <p class="footer"><span>NHƯỢC</span><span>03</span></p>`,
   () => `
     <p class="kicker">03  /  SKILL THEO NGƯỜI</p>
-    <h2>Ngày trước chọn skill mỗi bước. Giờ staff giữ sẵn.</h2>
+    <h2>Ví dụ vận hành, không phải số đo bench.</h2>
     <div class="cols c2" style="gap:64px;margin-top:24px">
       <div>
         <p class="bench-k">Không dùng staff</p>
@@ -205,7 +212,7 @@ const slides = [
         <tr><td>Agents Holding</td><td class="n win">40/40</td><td class="n win">470.075</td></tr>
       </tbody>
     </table>
-    <p class="dim" style="margin-top:28px;font-size:26px">Case 3 chạy grok-4.5, effort low. Hai case kia là grok-4.6, effort medium. Subagent tốn khoảng năm lần token.</p>
+    <p class="dim" style="margin-top:28px;font-size:26px">470.075 / 292.524 = 1,6×. 470.075 / 2.405.094 = 0,20×. Company OS là grok-4.5 effort low. Hai dòng kia là grok-4.6 effort medium.</p>
     <p class="footer"><span>BENCH V1</span><span>07</span></p>`,
   () => `
     <p class="kicker">08  /  DỰNG</p>

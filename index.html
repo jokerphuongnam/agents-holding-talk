@@ -121,10 +121,10 @@ const slides = [
   () => `
     <p class="kicker">AGENTS HOLDING  ·  JIRA-DRIVEN AI STAFF  ·  NOVEMBER 2026</p>
     <h1>A company of agents<br>for every product.</h1>
-    <p class="lead">Drag a Jira card. Your local Grok agent plans, codes, tests and reports back, and a hosted MCP server keeps the workflow honest.</p>
+    <p class="lead">Drag a Jira card. Your local AI agent plans, codes, tests and reports back, and a hosted MCP server keeps the workflow honest.</p>
     <div class="agenda" style="margin-top:56px">
-      <div><b>01  Architecture</b><span>A hosted MCP server plus a local Grok agent.</span></div>
-      <div><b>02  Licenses</b><span>Labels, direct renewals and marketplace keys.</span></div>
+      <div><b>01  Architecture</b><span>A hosted MCP server plus a local AI agent.</span></div>
+      <div><b>02  Keys and credits</b><span>Generate or import a key, plans, credits per action.</span></div>
       <div><b>03  The Jira flow</b><span>Gates, custom flows, per-task flow types, /task add, /task split, /company set auto-pr.</span></div>
       <div><b>04  Setup and tokens</b><span>/jira setup, the Keychain, the listener, /doctor, and measured savings.</span></div>
     </div>
@@ -134,22 +134,41 @@ const slides = [
     <h2>The server owns the rules. Your Mac does the work.</h2>
     <div class="cols c3" style="margin-top:24px">
       <div class="block"><span class="idx">Server</span><h3>MCP server</h3><p>Hosted for you. It holds the rules, slash commands, flows and license checks, and keeps each company's data isolated per license.</p></div>
-      <div class="block"><span class="idx">Mac</span><h3>Local Grok agent</h3><p>The listener receives notices and runs Grok in your repo. Git, Jira reads, comments and card moves are scripts. The model only writes plans and code, and returns structured JSON.</p></div>
+      <div class="block"><span class="idx">Mac</span><h3>Local AI agent</h3><p>The Jira Listener receives notices and runs your agent CLI in your repo. Git, Jira reads, comments and card moves are scripts. The model only writes plans and code, and returns structured JSON.</p></div>
       <div class="block"><span class="idx">Jira</span><h3>Your board is the UI</h3><p>You drag cards and comment. Agents answer as <span class="mono">[agents-holding]</span> comments and move the card when a stage is done.</p></div>
     </div>
     <p class="note">Your code never leaves your machine. The server only sees titles, artifacts and token counts.</p>
     <p class="footer"><span>ARCHITECTURE</span><span>02</span></p>`,
   () => `
-    <p class="kicker">02  /  LICENSES</p>
-    <h2>One key, many companies. Renewal depends on where it was bought.</h2>
-    <div>
-      <div class="rowline"><span class="path">License key</span><span>Each request is tied to the key. One key holds many companies, and each repo binds to one company.</span></div>
-      <div class="rowline"><span class="path">Label</span><span>The owner labels keys (<span class="mono">/admin licenses label</span>) so every customer and seat is easy to find.</span></div>
-      <div class="rowline"><span class="path">Direct key</span><span><span class="mono">/key renew</span> gives a ready-made email (<span class="mono">[RENEW] &lt;license id&gt;</span>). The same key keeps working.</span></div>
-      <div class="rowline"><span class="path">Marketplace key</span><span>It can't be renewed here. The assistant tells the customer to re-buy on that marketplace, with a support contact.</span></div>
-      <div class="rowline"><span class="path">Expiry</span><span>A warning appears 7 days ahead. After expiry, data is kept and the tools pause until renewal. <span class="mono">/key show</span> shows plan and expiry.</span></div>
+    <p class="kicker">02  /  KEYS</p>
+    <h2>One key per machine. Two ways to get it.</h2>
+    <div class="steps">
+      <div class="step"><b>1  Generate key</b><span><span class="mono">holding key generate</span>, or the Generate key button on the setup page. You get a Free key (1,500 credits a month), stored in this Mac's Keychain and never shown.</span></div>
+      <div class="step"><b>2  Import key</b><span><span class="mono">holding key import</span> asks for a key you already have (paid, or from another Mac) at a hidden prompt. Each extra Mac counts against the key's machine limit.</span></div>
+      <div class="step"><b>3  Lost it on this Mac?</b><span>Run Generate key again: it recovers this machine's key with the same credits and history, under a new secret. The old one stops working.</span></div>
+      <div class="step"><b>4  Check it</b><span><span class="mono">holding key show</span> shows the key id, plan, credits and machines. Send the key id (never the key) to the owner to upgrade or add credits.</span></div>
     </div>
-    <p class="footer"><span>LICENSES</span><span>03</span></p>`,
+    <p class="note">One Free key per machine, ever. Keys stay in the Keychain and never pass through the chat.</p>
+    <p class="footer"><span>KEYS</span><span>03</span></p>`,
+  () => `
+    <p class="kicker">02  /  CREDITS</p>
+    <h2>You pay per action, not per token.</h2>
+    <style>.cr td,.cr th{padding:5px 0!important;font-size:20px!important}.cr th{font-size:13px!important}</style><table class="cr">
+      <thead><tr><th>PLAN</th><th>CREDITS / MONTH</th><th>PLAN</th><th>CREDITS / MONTH</th></tr></thead>
+      <tbody>
+        <tr><td>Free</td><td class="n">1,500</td><td>Power</td><td class="n">80,000</td></tr>
+        <tr><td>Starter</td><td class="n">4,000</td><td>Max</td><td class="n">180,000</td></tr>
+        <tr><td>Lite</td><td class="n">6,000</td><td>Ultra</td><td class="n">300,000</td></tr>
+        <tr><td>Pro</td><td class="n">20,000</td><td>Marketplace</td><td class="n">20,000 for $10</td></tr>
+      </tbody>
+    </table>
+    <div class="steps" style="margin-top:14px">
+      <div class="step"><b>1  What costs</b><span>next action 2 credits; advance, Jira updates, staff brief, artifact, assign, CEO and inbox posts or replies 1 each. Everything else is free, and model tokens never count.</span></div>
+      <div class="step"><b>2  When credits run out</b><span>The Jira Listener stops and says so. Jira changes made meanwhile are not replayed; after renewal each open card's current state is reconciled.</span></div>
+      <div class="step"><b>3  Extra credits</b><span>Per period, until renewal (held 90 days at most), or until used up (they survive expiry but only work while the key is active).</span></div>
+    </div>
+    <p class="note">Check: <span class="mono">holding credit show</span>  ·  <span class="mono">holding billing</span></p>
+    <p class="footer"><span>CREDITS</span><span>04</span></p>`,
   () => `
     <p class="kicker">03  /  THE JIRA FLOW</p>
     <h2 style="font-size:52px">New cards wait in To Do. Dragging one to In Progress starts it.</h2>
@@ -159,7 +178,7 @@ const slides = [
       <div class="block"><h3 style="color:var(--amber)">◆ Gates</h3><p>The agent stops at Planned and In Review. You approve by moving the card or commenting <span class="mono">/approve</span>. Comments become feedback for the next run.</p></div>
       <div class="block"><h3>Done is yours</h3><p>Only you move a card to Done. The agent posts a closing comment by script, with no model call.</p></div>
     </div>
-    <p class="footer"><span>JIRA FLOW</span><span>04</span></p>`,
+    <p class="footer"><span>JIRA FLOW</span><span>05</span></p>`,
   () => `
     <p class="kicker" style="margin-bottom:16px">03  /  WHO DECIDES WHAT  ·  THE DEFAULT FLOW</p>
     <h2 style="font-size:42px;margin:0 0 4px">You decide at the gates. The AI thinks. Scripts do the rest.</h2>
@@ -170,7 +189,7 @@ const slides = [
       <div class="block"><h3 style="font-size:17px;color:#e7a15a;margin-bottom:2px">Other human decisions</h3><p style="font-size:14px;line-height:1.35">Task flow type: label <span class="mono">ah-flow:full|no_plan|no_dev|quick</span> · company flow at <span class="mono">/jira setup</span> · auto-PR on/off · which repo when a board feeds several (<span class="mono">repo:&lt;name&gt;</span>) · staff-created tasks stay in To Do until you drag them.</p></div>
       <div class="block"><h3 style="font-size:17px;color:#6db3f2;margin-bottom:2px">How staff are chosen</h3><p style="font-size:14px;line-height:1.35">Stage owners come from a fixed table (BA/PO, Tech Lead, QC). At Pre Coding the AI picks the developer from roster skills, and a script validates the pick. <span class="mono">/ceo</span> suggests an owner by rule scoring.</p></div>
     </div>
-    <p class="footer"><span>WHO DECIDES · DEFAULT FLOW</span><span>05</span></p>`,
+    <p class="footer"><span>WHO DECIDES · DEFAULT FLOW</span><span>06</span></p>`,
   () => `
     <p class="kicker">03  /  FLOWS THAT FIT THE WORK</p>
     <h2>Each company has its own flow. Each task has a flow type.</h2>
@@ -184,7 +203,7 @@ const slides = [
       </tbody>
     </table>
     <p class="dim" style="font-size:24px;margin-top:26px"><span class="mono" style="color:var(--green)">/flow edit</span> designs custom columns, gates, on-enter actions (open_pr, merge into develop) and branch names. <span class="mono" style="color:var(--green)">/flow KAN-7 quick</span> or an <span class="mono">ah-flow:</span> label changes a task's flow mid-work, and the card is remapped with a notice.</p>
-    <p class="footer"><span>FLOWS</span><span>06</span></p>`,
+    <p class="footer"><span>FLOWS</span><span>07</span></p>`,
   () => `
     <p class="kicker">03  /  COMMANDS</p>
     <h2>Work starts from a sentence and ends in a PR, if you want one.</h2>
@@ -192,13 +211,14 @@ const slides = [
     <div class="launch"><p class="cmd">/task split KAN-12</p><p>Splits a big issue into sub-tasks in To Do, each with its own flow.</p></div>
     <div class="launch"><p class="cmd">/company set auto-pr on</p><p>Off by default, set per company. When on, In Review pushes the branch and opens a PR with <span class="mono">gh</span>, and merge stages run <span class="mono">gh pr merge</span>. It never forces a merge. When off, branches stay local.</p></div>
     <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Tokens per task and stage, open tasks, plans and approvals, all from your agent.</p></div>
-    <p class="footer"><span>COMMANDS</span><span>07</span></p>`,
+    <div class="launch"><p class="cmd">holding status  ·  holding inbox list  ·  holding inbox dismiss &lt;id&gt;</p><p>Status shows how many CEO inbox items are waiting. Answer one with <span class="mono">holding inbox reply &lt;id&gt; &lt;answer&gt;</span>, or close it without answering.</p></div>
+    <p class="footer"><span>COMMANDS</span><span>08</span></p>`,
   () => `
     <p class="kicker">04  /  SETUP</p>
     <h2 style="font-size:52px">One command, then a checklist that ticks itself.</h2>
     <div class="steps">
       <div class="step"><b>1  /jira setup KAN</b><span>Reads the board with your Atlassian MCP, then opens a setup page with columns, links and live status.</span></div>
-      <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener keeps all Jira automation running.</b> In Jira's WebHooks menu, paste the URL from the setup page (it has <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Events: issue created and updated, comment created. Keep it on: <span class="mono">holding listener start &amp;&amp; holding listener autostart on</span>.</span></div>
+      <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener keeps all Jira automation running.</b> In Jira's system settings, add the Jira Listener URL from the setup page (it has <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Events: issue created and updated, comment created. Keep it on: <span class="mono">holding listener start &amp;&amp; holding listener autostart on</span>.</span></div>
       <div class="step"><b>3  Keychain token</b><span><span class="mono">holding jira connect &lt;site&gt; &lt;email&gt;</span> takes the API token at a hidden prompt and keeps it only in the macOS Keychain.</span></div>
       <div class="step"><b>4  Columns</b><span>The script creates missing statuses. Then drag the columns into order with Done last, because Jira has no API to reorder them.</span></div>
     </div>
@@ -211,7 +231,7 @@ const slides = [
         <div><span class="ps">$</span> holding doctor <span class="dimline">                          # or /doctor: checks every step</span></div>
       </div>
     </div>
-    <p class="footer"><span>SETUP · SAMPLE VALUES</span><span>08</span></p>`,
+    <p class="footer"><span>SETUP · SAMPLE VALUES</span><span>09</span></p>`,
   () => `
     <p class="kicker">04  /  TOKENS  ·  MEASURED ON KAN-1</p>
     <h2 style="font-size:52px">Same task, input tokens. The lean flow costs less than a direct prompt.</h2>
@@ -226,28 +246,28 @@ const slides = [
     </table>
     <p class="dim" style="font-size:23px;margin-top:22px">The lean flow uses scripts for Jira, git and comments, a cheap model for the plan stage, and one coding call with no MCP servers attached. Done, moves and merges make no model call.</p>
     <p class="note" style="bottom:70px;font-size:18px">Measured on one sample task (KAN-1), so results on other tasks will vary.</p>
-    <p class="footer"><span>TOKEN COMPARISON</span><span>09</span></p>`,
+    <p class="footer"><span>TOKEN COMPARISON</span><span>10</span></p>`,
   () => `
     <p class="kicker" style="margin-bottom:16px">05  /  RESILIENCE  ·  WHEN THINGS FAIL</p>
     <h2 style="font-size:46px;margin:0 0 22px">When things fail, work pauses. It is never lost.</h2>
     <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:32px"><div class="block" style="border-top:3px solid #6db3f2;padding-top:14px"><h3 style="font-size:26px;color:#6db3f2;margin-bottom:4px">Agent compaction / crash</h3><p style="font-size:16px;margin-bottom:12px">→ checkpoint &amp; resume</p><div style="font-size:17px;line-height:1.35;color:var(--ink)"><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">1</b>Every stage writes a local checkpoint.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">2</b>Big coding work is split into sub-steps, each WIP-committed, with a progress note on the card.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">3</b>A rerun resumes from the last checkpoint instead of restarting.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">4</b>Compaction or context overflow triggers one fresh retry with a resume note.</div></div></div><div class="block" style="border-top:3px solid #e7a15a;padding-top:14px"><h3 style="font-size:26px;color:#e7a15a;margin-bottom:4px">Agent expired / blocked</h3><p style="font-size:16px;margin-bottom:12px">→ fallback</p><div style="font-size:17px;line-height:1.35;color:var(--ink)"><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">1</b>CLI errors are classified: login expired, out of quota, rate limited, CLI missing.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">2</b>Rate limits back off 30s → 60s → 120s.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">3</b>Otherwise the next fallback command in <span class="mono">agents.jsonc</span> takes over, and the card says so.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">4</b>If nothing works: <span class="mono">agent-blocked</span> label, a comment in the task’s language with the exact fix (e.g. <span class="mono">claude login</span>), and a desktop notification.</div></div></div><div class="block" style="border-top:3px solid #e06a5c;padding-top:14px"><h3 style="font-size:26px;color:#e06a5c;margin-bottom:4px">MCP server problems</h3><p style="font-size:16px;margin-bottom:12px">down · quota · overload · timeout → warn &amp; reconcile</p><div style="font-size:17px;line-height:1.35;color:var(--ink)"><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">1</b>The Jira Listener shows a red warning and notifies you once.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">2</b>Work pauses without losing progress.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">3</b>On recovery it reads Jira for issues changed since the last event and replays each real status once, deduped, never inventing events.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">4</b>Read-only commands show cached data marked <span class="mono">STALE</span>; quota errors show a clear message.</div></div></div></div>
     <p class="dim" style="font-size:17px;margin-top:20px">Details: <span class="mono">docs/RESILIENCE.md</span></p>
-    <p class="footer"><span>RESILIENCE</span><span>10</span></p>`,
+    <p class="footer"><span>RESILIENCE</span><span>11</span></p>`,
   () => `
     <p class="kicker">END</p>
     <p class="giant">Drag a card.<br>Approve the plan.<br>Review the branch.</p>
     <p class="lead dim">The server keeps the flow. Scripts do the busywork. The model only does the thinking.</p>
-    <p class="footer"><span>AGENTS HOLDING</span><span>11</span></p>`
+    <p class="footer"><span>AGENTS HOLDING</span><span>12</span></p>`
 ];
 
 const slidesVi = [
   () => `
     <p class="kicker">AGENTS HOLDING  ·  ĐỘI NGŨ AI LÀM VIỆC QUA JIRA  ·  THÁNG 11/2026</p>
     <h1>Mỗi sản phẩm<br>một công ty agent.</h1>
-    <p class="lead">Bạn chỉ cần kéo thẻ Jira. Grok agent trên máy bạn tự lên plan, code, test rồi báo lại. MCP server lo giữ đúng quy trình.</p>
+    <p class="lead">Bạn chỉ cần kéo thẻ Jira. AI agent trên máy bạn tự lên plan, code, test rồi báo lại. MCP server lo giữ đúng quy trình.</p>
     <div class="agenda" style="margin-top:56px">
-      <div><b>01  Kiến trúc</b><span>MCP server chạy sẵn, Grok agent chạy trên máy bạn.</span></div>
-      <div><b>02  License</b><span>Gắn nhãn, gia hạn trực tiếp, key mua từ marketplace.</span></div>
+      <div><b>01  Kiến trúc</b><span>MCP server chạy sẵn, AI agent chạy trên máy bạn.</span></div>
+      <div><b>02  Key và credit</b><span>Tạo hoặc nhập key, các gói, credit cho từng thao tác.</span></div>
       <div><b>03  Quy trình Jira</b><span>Bước duyệt, ai quyết việc gì, flow riêng, flow theo task, /task add, /task split, /company set auto-pr.</span></div>
       <div><b>04  Cài đặt và token</b><span>/jira setup, Keychain, listener, /doctor và số token tiết kiệm được.</span></div>
     </div>
@@ -257,22 +277,41 @@ const slidesVi = [
     <h2>Server nắm luật. Máy Mac của bạn làm việc.</h2>
     <div class="cols c3" style="margin-top:24px">
       <div class="block"><span class="idx">Server</span><h3>MCP server</h3><p>Chạy sẵn, bạn không cần tự host. Server giữ luật, slash command, flow và kiểm tra license. Dữ liệu của mỗi công ty được tách riêng theo license.</p></div>
-      <div class="block"><span class="idx">Mac</span><h3>Grok agent trên máy bạn</h3><p>Listener nhận thông báo rồi chạy Grok ngay trong repo. Git, đọc Jira, comment, chuyển thẻ đều do script làm. Model chỉ viết plan và code, trả về JSON.</p></div>
+      <div class="block"><span class="idx">Mac</span><h3>AI agent trên máy bạn</h3><p>Jira Listener nhận thông báo rồi chạy agent CLI ngay trong repo. Git, đọc Jira, comment, chuyển thẻ đều do script làm. Model chỉ viết plan và code, trả về JSON.</p></div>
       <div class="block"><span class="idx">Jira</span><h3>Board Jira là giao diện</h3><p>Bạn kéo thẻ và comment. Agent trả lời bằng comment <span class="mono">[agents-holding]</span> và tự chuyển thẻ khi xong việc.</p></div>
     </div>
     <p class="note">Code không bao giờ rời khỏi máy bạn. Server chỉ thấy tiêu đề, kết quả từng bước và số token.</p>
     <p class="footer"><span>KIẾN TRÚC</span><span>02</span></p>`,
   () => `
-    <p class="kicker">02  /  LICENSE</p>
-    <h2>Một key dùng cho nhiều công ty. Gia hạn thế nào tuỳ chỗ bạn mua.</h2>
-    <div>
-      <div class="rowline"><span class="path">License key</span><span>Mọi request đều gắn với key. Một key có nhiều công ty, mỗi repo thuộc về một công ty.</span></div>
-      <div class="rowline"><span class="path">Nhãn</span><span>Chủ key gắn nhãn (<span class="mono">/admin licenses label</span>) để dễ tìm từng khách và từng seat.</span></div>
-      <div class="rowline"><span class="path">Mua trực tiếp</span><span>Gõ <span class="mono">/key renew</span> là có sẵn email (<span class="mono">[RENEW] &lt;license id&gt;</span>). Key giữ nguyên, không phải đổi.</span></div>
-      <div class="rowline"><span class="path">Mua qua marketplace</span><span>Không gia hạn ở đây được. Trợ lý sẽ hướng dẫn khách mua lại trên marketplace đó, kèm liên hệ hỗ trợ.</span></div>
-      <div class="rowline"><span class="path">Hết hạn</span><span>Báo trước 7 ngày. Hết hạn thì dữ liệu vẫn còn, chỉ tạm khoá tool cho tới khi gia hạn. <span class="mono">/key show</span> để xem gói và ngày hết hạn.</span></div>
+    <p class="kicker">02  /  KEY</p>
+    <h2>Mỗi máy một key. Có hai cách để lấy.</h2>
+    <div class="steps">
+      <div class="step"><b>1  Tạo key</b><span>Gõ <span class="mono">holding key generate</span> hoặc bấm Generate key trên trang cài đặt. Bạn nhận key Free (1.500 credit mỗi tháng), lưu thẳng vào Keychain của máy và không hiện ra màn hình.</span></div>
+      <div class="step"><b>2  Nhập key</b><span><span class="mono">holding key import</span> hỏi key bạn đã có (key trả phí, hoặc key từ máy khác) ở ô nhập ẩn. Mỗi máy thêm vào sẽ tính vào giới hạn số máy của key.</span></div>
+      <div class="step"><b>3  Lỡ mất key trên máy này?</b><span>Chạy lại Tạo key: hệ thống khôi phục đúng key của máy, giữ nguyên credit và lịch sử, chỉ đổi sang mã mới. Mã cũ hết dùng được.</span></div>
+      <div class="step"><b>4  Kiểm tra</b><span><span class="mono">holding key show</span> cho xem key id, gói, credit và các máy. Muốn nâng gói hay thêm credit thì gửi key id (không gửi key) cho owner.</span></div>
     </div>
-    <p class="footer"><span>LICENSE</span><span>03</span></p>`,
+    <p class="note">Mỗi máy chỉ được một key Free. Key nằm trong Keychain, không bao giờ đi qua khung chat.</p>
+    <p class="footer"><span>KEY</span><span>03</span></p>`,
+  () => `
+    <p class="kicker">02  /  CREDIT</p>
+    <h2>Tính tiền theo thao tác, không theo token.</h2>
+    <style>.cr td,.cr th{padding:5px 0!important;font-size:20px!important}.cr th{font-size:13px!important}</style><table class="cr">
+      <thead><tr><th>GÓI</th><th>CREDIT / THÁNG</th><th>GÓI</th><th>CREDIT / THÁNG</th></tr></thead>
+      <tbody>
+        <tr><td>Free</td><td class="n">1.500</td><td>Power</td><td class="n">80.000</td></tr>
+        <tr><td>Starter</td><td class="n">4.000</td><td>Max</td><td class="n">180.000</td></tr>
+        <tr><td>Lite</td><td class="n">6.000</td><td>Ultra</td><td class="n">300.000</td></tr>
+        <tr><td>Pro</td><td class="n">20.000</td><td>Marketplace</td><td class="n">20.000 giá $10</td></tr>
+      </tbody>
+    </table>
+    <div class="steps" style="margin-top:14px">
+      <div class="step"><b>1  Cái gì tốn credit</b><span>next action 2 credit; advance, cập nhật Jira, brief cho staff, lưu kết quả, giao việc, CEO, đăng hoặc trả lời inbox mỗi lần 1 credit. Còn lại đều miễn phí, token của model không bao giờ bị tính.</span></div>
+      <div class="step"><b>2  Khi hết credit</b><span>Jira Listener dừng và báo rõ lý do. Những thay đổi trên Jira trong lúc đó không được chạy lại; gia hạn xong, hệ thống chỉ đồng bộ trạng thái hiện tại của từng thẻ đang mở.</span></div>
+      <div class="step"><b>3  Credit cộng thêm</b><span>Dùng trong kỳ, giữ tới lần gia hạn (tối đa 90 ngày), hoặc giữ tới khi dùng hết (còn nguyên sau khi key hết hạn nhưng chỉ dùng được khi key còn hiệu lực).</span></div>
+    </div>
+    <p class="note">Xem: <span class="mono">holding credit show</span>  ·  <span class="mono">holding billing</span></p>
+    <p class="footer"><span>CREDIT</span><span>04</span></p>`,
   () => `
     <p class="kicker">03  /  QUY TRÌNH JIRA</p>
     <h2 style="font-size:52px">Thẻ mới nằm ở To Do. Kéo sang In Progress là agent bắt đầu.</h2>
@@ -282,7 +321,7 @@ const slidesVi = [
       <div class="block"><h3 style="color:var(--amber)">◆ Chờ bạn duyệt</h3><p>Agent dừng ở Planned và In Review để chờ bạn. Duyệt bằng cách kéo thẻ hoặc comment <span class="mono">/approve</span>. Comment của bạn sẽ được dùng cho lần chạy sau.</p></div>
       <div class="block"><h3>Done là việc của bạn</h3><p>Chỉ bạn mới kéo thẻ sang Done. Agent đăng comment tổng kết bằng script, không gọi model.</p></div>
     </div>
-    <p class="footer"><span>QUY TRÌNH JIRA</span><span>04</span></p>`,
+    <p class="footer"><span>QUY TRÌNH JIRA</span><span>05</span></p>`,
   () => `
     <p class="kicker" style="margin-bottom:16px">03  /  AI LÀM GÌ, BẠN DUYỆT GÌ  ·  FLOW MẶC ĐỊNH</p>
     <h2 style="font-size:42px;margin:0 0 4px">Bạn duyệt, AI suy nghĩ, script lo phần còn lại.</h2>
@@ -293,7 +332,7 @@ const slidesVi = [
       <div class="block"><h3 style="font-size:17px;color:#e7a15a;margin-bottom:2px">Những việc khác do bạn quyết</h3><p style="font-size:14px;line-height:1.35">Kiểu flow của task: gắn nhãn <span class="mono">ah-flow:full|no_plan|no_dev|quick</span> · flow công ty ở <span class="mono">/jira setup</span> · bật/tắt auto-PR · board dùng chung cho nhiều repo thì gắn nhãn <span class="mono">repo:&lt;name&gt;</span> · task do staff tạo sẽ nằm ở To Do cho tới khi bạn kéo.</p></div>
       <div class="block"><h3 style="font-size:17px;color:#6db3f2;margin-bottom:2px">Chọn staff thế nào</h3><p style="font-size:14px;line-height:1.35">Mỗi bước có người phụ trách cố định (BA/PO, Tech Lead, QC). Tới Pre Coding, AI chọn developer dựa trên skill trong roster, script kiểm tra lại. <span class="mono">/ceo</span> gợi ý người phụ trách bằng cách chấm điểm theo luật.</p></div>
     </div>
-    <p class="footer"><span>AI LÀM GÌ · FLOW MẶC ĐỊNH</span><span>05</span></p>`,
+    <p class="footer"><span>AI LÀM GÌ · FLOW MẶC ĐỊNH</span><span>06</span></p>`,
   () => `
     <p class="kicker">03  /  FLOW THEO TỪNG LOẠI VIỆC</p>
     <h2>Mỗi công ty một flow. Mỗi task chọn một kiểu flow.</h2>
@@ -307,7 +346,7 @@ const slidesVi = [
       </tbody>
     </table>
     <p class="dim" style="font-size:24px;margin-top:26px"><span class="mono" style="color:var(--green)">/flow edit</span> để tự thiết kế cột, bước duyệt, việc tự chạy khi vào cột (open_pr, merge vào develop) và cách đặt tên branch. Muốn đổi flow giữa chừng thì gõ <span class="mono" style="color:var(--green)">/flow KAN-7 quick</span> hoặc gắn nhãn <span class="mono">ah-flow:</span>; thẻ sẽ được chuyển sang cột tương ứng và có thông báo.</p>
-    <p class="footer"><span>FLOW</span><span>06</span></p>`,
+    <p class="footer"><span>FLOW</span><span>07</span></p>`,
   () => `
     <p class="kicker">03  /  LỆNH</p>
     <h2>Bắt đầu từ một câu, kết thúc bằng một PR (nếu bạn muốn).</h2>
@@ -315,13 +354,14 @@ const slidesVi = [
     <div class="launch"><p class="cmd">/task split KAN-12</p><p>Tách issue lớn thành nhiều sub-task ở To Do, mỗi cái một flow riêng.</p></div>
     <div class="launch"><p class="cmd">/company set auto-pr on</p><p>Mặc định tắt, bật theo từng công ty. Khi bật, tới In Review agent push branch và mở PR bằng <span class="mono">gh</span>; bước merge chạy <span class="mono">gh pr merge</span>, không bao giờ ép merge. Khi tắt, branch chỉ nằm trên máy.</p></div>
     <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Xem token theo task và từng bước, task đang mở, plan và duyệt, ngay trong agent của bạn.</p></div>
-    <p class="footer"><span>LỆNH</span><span>07</span></p>`,
+    <div class="launch"><p class="cmd">holding status  ·  holding inbox list  ·  holding inbox dismiss &lt;id&gt;</p><p>Status cho biết CEO inbox còn bao nhiêu việc chờ bạn. Trả lời bằng <span class="mono">holding inbox reply &lt;id&gt; &lt;câu trả lời&gt;</span>, hoặc đóng luôn nếu không cần trả lời.</p></div>
+    <p class="footer"><span>LỆNH</span><span>08</span></p>`,
   () => `
     <p class="kicker">04  /  CÀI ĐẶT</p>
     <h2 style="font-size:52px">Một lệnh, rồi checklist tự tick dần.</h2>
     <div class="steps">
       <div class="step"><b>1  /jira setup KAN</b><span>Đọc board qua Atlassian MCP của bạn, rồi mở trang cài đặt có sẵn cột, link và trạng thái.</span></div>
-      <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener là thứ giữ cho toàn bộ automation trên Jira chạy được.</b> Trong menu WebHooks của Jira, dán URL ở trang cài đặt (có <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Sự kiện: tạo/cập nhật issue, tạo comment. Luôn bật: <span class="mono">holding listener start &amp;&amp; holding listener autostart on</span>.</span></div>
+      <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener là thứ giữ cho toàn bộ automation trên Jira chạy được.</b> Trong phần cài đặt hệ thống của Jira, thêm URL Jira Listener ở trang cài đặt (có <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Sự kiện: tạo/cập nhật issue, tạo comment. Luôn bật: <span class="mono">holding listener start &amp;&amp; holding listener autostart on</span>.</span></div>
       <div class="step"><b>3  Token vào Keychain</b><span><span class="mono">holding jira connect &lt;site&gt; &lt;email&gt;</span> hỏi API token (gõ ẩn) và chỉ lưu trong macOS Keychain.</span></div>
       <div class="step"><b>4  Sắp xếp cột</b><span>Script tự tạo các status còn thiếu. Bạn kéo các cột theo thứ tự, để Done cuối cùng, vì Jira không có API đổi thứ tự cột.</span></div>
     </div>
@@ -334,7 +374,7 @@ const slidesVi = [
         <div><span class="ps">$</span> holding doctor <span class="dimline">                          # hoặc /doctor: kiểm tra từng bước</span></div>
       </div>
     </div>
-    <p class="footer"><span>CÀI ĐẶT · GIÁ TRỊ MẪU</span><span>08</span></p>`,
+    <p class="footer"><span>CÀI ĐẶT · GIÁ TRỊ MẪU</span><span>09</span></p>`,
   () => `
     <p class="kicker">04  /  TOKEN  ·  ĐO TRÊN KAN-1</p>
     <h2 style="font-size:52px">Cùng một task, so token đầu vào: flow gọn còn rẻ hơn hỏi thẳng.</h2>
@@ -349,18 +389,18 @@ const slidesVi = [
     </table>
     <p class="dim" style="font-size:23px;margin-top:22px">Flow gọn để script lo Jira, git và comment, dùng model rẻ cho bước lên plan, và chỉ gọi model code một lần, không gắn MCP server nào. Done, chuyển thẻ và merge không tốn lần gọi model nào.</p>
     <p class="note" style="bottom:70px;font-size:18px">Số liệu đo trên một task mẫu (KAN-1), task khác sẽ khác.</p>
-    <p class="footer"><span>SO SÁNH TOKEN</span><span>09</span></p>`,
+    <p class="footer"><span>SO SÁNH TOKEN</span><span>10</span></p>`,
   () => `
     <p class="kicker" style="margin-bottom:16px">05  /  KHI CÓ SỰ CỐ</p>
     <h2 style="font-size:46px;margin:0 0 22px">Có sự cố thì việc tạm dừng, chứ không bao giờ mất.</h2>
     <div class="cols" style="grid-template-columns:repeat(3,1fr);gap:32px"><div class="block" style="border-top:3px solid #6db3f2;padding-top:14px"><h3 style="font-size:26px;color:#6db3f2;margin-bottom:4px">Agent bị compact / crash</h3><p style="font-size:16px;margin-bottom:12px">→ lưu checkpoint rồi làm tiếp</p><div style="font-size:17px;line-height:1.35;color:var(--ink)"><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">1</b>Xong bước nào là lưu checkpoint ở máy bước đó.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">2</b>Việc code lớn được chia nhỏ, mỗi bước commit WIP và ghi tiến độ lên thẻ.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">3</b>Chạy lại thì làm tiếp từ chỗ dừng, không phải làm lại từ đầu.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">4</b>Bị compact hay tràn context thì thử lại một lần với phiên mới, kèm ghi chú để làm tiếp.</div></div></div><div class="block" style="border-top:3px solid #e7a15a;padding-top:14px"><h3 style="font-size:26px;color:#e7a15a;margin-bottom:4px">Agent hết hạn / bị chặn</h3><p style="font-size:16px;margin-bottom:12px">→ chuyển sang agent dự phòng</p><div style="font-size:17px;line-height:1.35;color:var(--ink)"><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">1</b>Lỗi CLI được phân loại: hết phiên đăng nhập, hết quota, bị rate limit, chưa cài CLI.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">2</b>Bị rate limit thì chờ 30s → 60s → 120s rồi thử lại.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">3</b>Lỗi khác thì lệnh dự phòng kế tiếp trong <span class="mono">agents.jsonc</span> làm thay, và thẻ có ghi rõ.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">4</b>Hết cách thì thẻ được gắn nhãn <span class="mono">agent-blocked</span>, có comment bằng ngôn ngữ của task chỉ đúng cách sửa (vd. <span class="mono">claude login</span>), và báo lên desktop.</div></div></div><div class="block" style="border-top:3px solid #e06a5c;padding-top:14px"><h3 style="font-size:26px;color:#e06a5c;margin-bottom:4px">MCP server gặp vấn đề</h3><p style="font-size:16px;margin-bottom:12px">sập · hết quota · quá tải · timeout → cảnh báo rồi đồng bộ lại</p><div style="font-size:17px;line-height:1.35;color:var(--ink)"><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">1</b>Jira Listener hiện cảnh báo đỏ và báo bạn một lần thôi.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">2</b>Việc tạm dừng, tiến độ vẫn giữ nguyên.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">3</b>Khi ổn lại, nó đọc Jira xem issue nào đổi từ lần cuối, phát lại mỗi trạng thái thật đúng một lần, không trùng, không tự bịa ra.</div><div style="margin-bottom:8px"><b style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f4f0e6;color:#10210c;text-align:center;font-size:13px;line-height:20px;margin-right:6px">4</b>Lệnh chỉ đọc thì trả dữ liệu cache có đánh dấu <span class="mono">STALE</span>; hết quota thì báo rõ ràng.</div></div></div></div>
     <p class="dim" style="font-size:17px;margin-top:20px">Chi tiết: <span class="mono">docs/RESILIENCE.md</span></p>
-    <p class="footer"><span>KHI CÓ SỰ CỐ</span><span>10</span></p>`,
+    <p class="footer"><span>KHI CÓ SỰ CỐ</span><span>11</span></p>`,
   () => `
     <p class="kicker">HẾT</p>
     <p class="giant">Kéo thẻ.<br>Duyệt plan.<br>Review branch.</p>
     <p class="lead dim">Server giữ quy trình. Script lo việc vặt. Model chỉ việc suy nghĩ.</p>
-    <p class="footer"><span>AGENTS HOLDING</span><span>11</span></p>`
+    <p class="footer"><span>AGENTS HOLDING</span><span>12</span></p>`
 ];
 
 const stage = document.getElementById("stage");

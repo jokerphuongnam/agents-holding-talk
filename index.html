@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agents Holding</title>
+<title>Agents Holding · Jira-driven AI staff</title>
 <style>
   :root {
     --bg: #070b0a;
@@ -104,6 +104,10 @@
   .agenda b { display: block; font-size: 28px; font-weight: 600; margin-bottom: 4px; }
   .agenda span { display: block; font-size: 22px; color: var(--dim); }
   .note { position: absolute; left: 88px; right: 88px; bottom: 86px; color: var(--mute); font-size: 20px; }
+  body.all { overflow: auto; height: auto; }
+  body.all .stage { position: static; transform: none; margin: 0 auto 24px; height: auto; background: none; overflow: visible; }
+  body.all .stage::before { display: none; }
+  body.all .slide { display: block; height: 900px; background: var(--stage); margin-bottom: 24px; }
 </style>
 </head>
 <body>
@@ -111,286 +115,108 @@
 <script>
 const slides = [
   () => `
-    <p class="kicker">AGENTS HOLDING  ·  7 MỤC  ·  3 LẦN DEMO  ·  DỪNG Ở KẾT</p>
-    <h1 style="font-size:56px">Một công ty cho mỗi sản phẩm.</h1>
-    <div class="agenda">
-      <div><b>01  Vì sao có</b><span>Ưu và nhược lấy từ hai lần bench Todo, không nói suông.</span></div>
-      <div><b>02  Hiệu quả  ·  demo</b><span>Skill gắn sẵn trên staff. Rồi mở thẻ người đó.</span></div>
-      <div><b>03  Số đo thật</b><span>v3 hòa 39/40. v1 khác model, chỉ dùng để so token.</span></div>
-      <div><b>04  Dựng và mở  ·  demo</b><span>--continue liệt kê phòng. BA vào đúng phòng.</span></div>
-      <div><b>05  Một lượt việc  ·  demo</b><span>Một câu cho CEO. Plan có điểm dừng.</span></div>
-      <div><b>06  Bổ trợ, hạn chế, sắp tới</b><span>App Mac chạy chưa ổn. Context lâu, grok trần, chỉ hai kênh nói. Sau này: Jev và script.</span></div>
-      <div><b>07  Kết</b><span>Bài dừng sau hạn chế context lâu.</span></div>
+    <p class="kicker">AGENTS HOLDING  ·  JIRA-DRIVEN AI STAFF  ·  NOVEMBER 2026</p>
+    <h1>A company of agents<br>for every product.</h1>
+    <p class="lead">Drag a Jira card. Your local Grok agent plans, codes, tests and reports back, and a hosted Supabase server keeps the workflow honest.</p>
+    <div class="agenda" style="margin-top:56px">
+      <div><b>01  Architecture</b><span>Supabase MCP server plus a local Grok agent.</span></div>
+      <div><b>02  Licenses</b><span>Labels, direct renewals and marketplace keys.</span></div>
+      <div><b>03  The Jira flow</b><span>Gates, custom flows, per-task flow types, /new-task, /split, /auto-pr.</span></div>
+      <div><b>04  Setup and tokens</b><span>/connect-jira, the Keychain, the listener, /doctor, and measured savings.</span></div>
     </div>
-    <p class="footer"><span>THUYẾT TRÌNH KỸ THUẬT</span><span>01</span></p>`,
+    <p class="footer"><span>AGENTS HOLDING</span><span>01</span></p>`,
   () => `
-    <p class="kicker">01  /  ƯU  ·  CÓ SỐ</p>
-    <h2>Cùng câu Todo, v3. Nhanh hơn, ít token hơn, điểm hòa.</h2>
-    <table>
-      <thead><tr><th></th><th>CHAT THƯỜNG</th><th>COMPANY OS</th></tr></thead>
-      <tbody>
-        <tr><td>Điểm</td><td class="n">39/40</td><td class="n">39/40</td></tr>
-        <tr><td>Token</td><td class="n">657.966</td><td class="n win">478.849 · −27%</td></tr>
-        <tr><td>Thời gian</td><td class="n">244 giây</td><td class="n win">159 giây · −35%</td></tr>
-        <tr><td>API, React, chạy, thư viện</td><td class="n">5/5 mỗi mục</td><td class="n">5/5 mỗi mục</td></tr>
-      </tbody>
-    </table>
-    <p class="footer"><span>VÌ SAO CÓ</span><span>02</span></p>`,
-  () => `
-    <p class="kicker">02  /  NHƯỢC  ·  CÓ SỐ</p>
-    <h2>Nhược là test mỏng hơn. Token hơn một chat ở lần v1.</h2>
-    <table>
-      <thead><tr><th></th><th>CHAT THƯỜNG</th><th>COMPANY OS</th></tr></thead>
-      <tbody>
-        <tr><td>Test giao diện</td><td class="n win">12 test · mục 5/5</td><td class="n">1 test · mục 4/5</td></tr>
-        <tr><td>Test backend</td><td class="n">8 test · mục 5/5</td><td class="n">2 test · mục 5/5</td></tr>
-        <tr><td>v1 so với một chat</td><td class="n">292.524 token · 25/40</td><td class="n">470.075 · 1,6× · 40/40</td></tr>
-        <tr><td>v1 so với subagent</td><td class="n">2.405.094 · 36/40</td><td class="n win">470.075 · 0,20× · 40/40</td></tr>
-      </tbody>
-    </table>
-    <p class="footer"><span>NHƯỢC</span><span>03</span></p>`,
-  () => `
-    <p class="kicker">03  /  SKILL THEO NGƯỜI</p>
-    <h2>Ví dụ vận hành, không phải số đo bench.</h2>
-    <div class="cols c2" style="gap:64px;margin-top:24px">
-      <div>
-        <p class="bench-k">Không dùng staff</p>
-        <p class="lead" style="font-size:32px;margin-top:18px">100 skill. 10 skill cho PO. Viết plan thì phải tìm trong 100 skill. Bước sau lại chọn lại.</p>
-      </div>
-      <div>
-        <p class="bench-k">Agents Holding</p>
-        <p class="lead" style="font-size:32px;margin-top:18px">Mỗi staff một việc và một bộ skill đã setup. Không nạp lại sau mỗi lần chat. Thiếu thì làm thêm cho đúng người.</p>
-      </div>
+    <p class="kicker">01  /  ARCHITECTURE</p>
+    <h2>The server owns the rules. Your Mac does the work.</h2>
+    <div class="cols c3" style="margin-top:24px">
+      <div class="block"><span class="idx">Server</span><h3>Supabase MCP</h3><p>Edge functions: <span class="mono">mcp</span> (tools and slash commands), <span class="mono">jira-webhook</span> (board events) and <span class="mono">setup</span> (the checklist page). Postgres holds companies, tasks, flows, artifacts and usage, isolated per license.</p></div>
+      <div class="block"><span class="idx">Mac</span><h3>Local Grok agent</h3><p>The listener receives notices and runs Grok in your repo. Git, Jira reads, comments and card moves are scripts. The model only writes plans and code, and returns structured JSON.</p></div>
+      <div class="block"><span class="idx">Jira</span><h3>Your board is the UI</h3><p>You drag cards and comment. Agents answer as <span class="mono">[agents-holding]</span> comments and move the card when a stage is done.</p></div>
     </div>
-    <p class="footer"><span>SKILL THEO NGƯỜI</span><span>04</span></p>`,
+    <p class="note">Your code never leaves your machine. The server only sees titles, artifacts and token counts.</p>
+    <p class="footer"><span>ARCHITECTURE</span><span>02</span></p>`,
   () => `
-    <p class="kicker">DEMO  1 / 3</p>
-    <h2 style="font-size:46px;margin-bottom:8px">Mở thẻ. Người này chỉ viết plan.</h2>
-    <div class="term">
-      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>po-new.md</span></div>
-      <div class="term-body">
-        <div><span class="ps">$</span> sed -n '1,16p' system/staffs/po/po-new.md</div>
-        <div class="dimline">name: po-new</div>
-        <div class="dimline">description: Create one new plan file under cache/plans/.</div>
-        <div style="margin-top:10px">Role — po-new. Create one new plan. You do not edit an existing plan and you do not code.</div>
-        <div class="dimline" style="margin-top:10px">Out of scope: stop and return it to po-lead.</div>
-      </div>
-    </div>
-    <p class="footer"><span>DEMO · SKILL</span><span>05</span></p>`,
-  () => `
-    <p class="kicker">06  /  BENCH THẬT  ·  V3</p>
-    <h2 style="font-size:44px;margin-bottom:8px">Cùng 39/40. App hòa. Chat có nhiều test giao diện hơn.</h2>
-    <div class="bench">
-      <div>
-        <p class="stat">−27%</p>
-        <p class="bench-k">Token</p>
-        <p class="bench-n">478.849</p>
-        <p class="bench-vs">so với 657.966</p>
-      </div>
-      <div>
-        <p class="stat">−35%</p>
-        <p class="bench-k">Thời gian</p>
-        <p class="bench-n">159 giây</p>
-        <p class="bench-vs">so với 244 giây</p>
-      </div>
-      <div>
-        <p class="stat">39<span style="color:var(--dim)">/40</span></p>
-        <p class="bench-k">Chất lượng</p>
-        <p class="bench-n">Hòa</p>
-        <p class="bench-vs">Chat 12 test giao diện, Company OS 1</p>
-      </div>
-    </div>
-    <p class="footer"><span>BENCH V3</span><span>06</span></p>`,
-  () => `
-    <p class="kicker">07  /  BENCH THẬT  ·  V1</p>
-    <h2>Lần cũ: chỉ Company OS đủ 40/40. Model không cùng, không lấy làm bằng chứng.</h2>
-    <table>
-      <thead><tr><th>CÁCH LÀM</th><th>ĐIỂM</th><th>TOKEN</th></tr></thead>
-      <tbody>
-        <tr><td>Một chat</td><td class="n">25/40</td><td class="n">292.524</td></tr>
-        <tr><td>Subagent không tổ chức</td><td class="n">36/40</td><td class="n">2.405.094</td></tr>
-        <tr><td>Agents Holding</td><td class="n win">40/40</td><td class="n win">470.075</td></tr>
-      </tbody>
-    </table>
-    <p class="dim" style="margin-top:28px;font-size:26px">470.075 / 292.524 = 1,6×. 470.075 / 2.405.094 = 0,20×. Company OS là grok-4.5 effort low. Hai dòng kia là grok-4.6 effort medium.</p>
-    <p class="footer"><span>BENCH V1</span><span>07</span></p>`,
-  () => `
-    <p class="kicker">08  /  DỰNG</p>
-    <h2>Bốn bước, một repo. Harness là lựa chọn.</h2>
-    <div class="steps">
-      <div class="step"><b>Cài holding</b><span>agents-holding vào ~/.agents. Chỉ holding tạo công ty.</span></div>
-      <div class="step"><b>create-company</b><span>--project-root là repo. --tech theo stack đang dùng.</span></div>
-      <div class="step"><b>company_os.sh all</b><span>Sinh staff, skill, harness, launch.sh.</span></div>
-      <div class="step"><b>Mở CEO</b><span>Đứng ở gốc repo. Câu đầu đi vào launch.sh và harness đã chọn.</span></div>
-    </div>
-    <div class="steps" style="margin-top:48px">
-      <div class="step"><b>grok</b><span>Cả phiên một agent.</span></div>
-      <div class="step"><b>claude</b><span>Cả phiên một agent.</span></div>
-      <div class="step"><b>codex</b><span>Cả phiên một agent.</span></div>
-      <div class="step"><b>merge</b><span>Mỗi staff một agent, theo runtime_router.toml.</span></div>
-    </div>
-    <p class="footer"><span>DỰNG CÔNG TY</span><span>08</span></p>`,
-  () => `
-    <p class="kicker">09  /  ĐIỂM MẠNH</p>
-    <h2>Công ty nằm cạnh repo. Không nằm trong commit.</h2>
-    <div class="cols c2" style="gap:56px;margin-top:12px">
-      <div>
-        <p class="bench-k">Ngày trước</p>
-        <p class="lead" style="font-size:30px;margin-top:16px">Muốn làm với một project thì phải setup trong chính project đó, rồi tự canh để không push.</p>
-      </div>
-      <div>
-        <p class="bench-k">Agents Holding</p>
-        <p class="path" style="display:block;margin-top:18px;font-size:28px;line-height:1.45">Project/<br>├ Company và file generate<br>└ Project thực tế/<br>&nbsp;&nbsp;&nbsp;├ code<br>&nbsp;&nbsp;&nbsp;└ agent của từng người</p>
-        <p class="dim" style="font-size:26px;margin-top:18px">Agent của mỗi người khác nhau, và không được commit.</p>
-      </div>
-    </div>
-    <p class="footer"><span>TÁCH KHỎI GIT</span><span>09</span></p>`,
-  () => `
-    <p class="kicker">10  /  TRÊN ĐĨA</p>
-    <h2>Công ty nằm trong .agents.</h2>
+    <p class="kicker">02  /  LICENSES</p>
+    <h2>One key, many companies. Renewal depends on where it was bought.</h2>
     <div>
-      <div class="rowline"><span class="path">launch.sh</span><span>Cửa vào. Mặc định CEO. --agent ba-user mở BA.</span></div>
-      <div class="rowline"><span class="path">system/staffs</span><span>Thẻ từng vai. Phiên mở bằng đúng thẻ đó.</span></div>
-      <div class="rowline"><span class="path">system/install</span><span>role_gate, plan_history, context_reload.</span></div>
-      <div class="rowline"><span class="path">cache/plans</span><span>Plan Markdown. Chủ là dòng owner:.</span></div>
-      <div class="rowline"><span class="path">cache/work-history</span><span>Phòng là nhánh room/. Lời nói nằm ở talk/.</span></div>
+      <div class="rowline"><span class="path">License key</span><span>Each request is tied to the key. One key holds many companies, and each repo binds to one company.</span></div>
+      <div class="rowline"><span class="path">Label</span><span>The owner labels keys (<span class="mono">/admin licenses label</span>) so every customer and seat is easy to find.</span></div>
+      <div class="rowline"><span class="path">Direct key</span><span><span class="mono">/renew</span> gives a ready-made email (<span class="mono">[RENEW] &lt;license id&gt;</span>). The same key keeps working.</span></div>
+      <div class="rowline"><span class="path">Marketplace key</span><span>It can't be renewed here. The assistant tells the customer to re-buy on that marketplace, with a support contact.</span></div>
+      <div class="rowline"><span class="path">Expiry</span><span>A warning appears 7 days ahead. After expiry, data is kept and the tools pause until renewal. <span class="mono">/whoami</span> shows plan and expiry.</span></div>
     </div>
-    <p class="footer"><span>TRÊN ĐĨA</span><span>10</span></p>`,
+    <p class="footer"><span>LICENSES</span><span>03</span></p>`,
   () => `
-    <p class="kicker">11  /  MỞ PHIÊN</p>
-    <h2 style="font-size:48px;margin-bottom:20px">Đứng ở repo. Gọi launch.sh.</h2>
-    <div class="launch">
-      <p class="cmd">./launch.sh &lt;harness&gt; --continue</p>
-      <p>Không kèm tên phòng: hiện danh sách phòng đã lưu. Mũi tên chọn, Enter vào.</p>
+    <p class="kicker">03  /  THE JIRA FLOW</p>
+    <h2 style="font-size:52px">New cards wait in To Do. Dragging one to In Progress starts it.</h2>
+    <p class="path" style="font-size:25px;line-height:1.7">To Do → <span style="color:var(--ink)">In Progress</span> → Product Work → BA Question → <span style="color:var(--amber)">Planned ◆</span> → Pre Coding → Coding → QC → <span style="color:var(--amber)">In Review ◆</span> → Done</p>
+    <div class="cols c3" style="margin-top:36px">
+      <div class="block"><h3>Agents</h3><p>They analyse, ask (BA Question), write the plan, then the tech plan, code and QC. The server checks that each move has its artifact.</p></div>
+      <div class="block"><h3 style="color:var(--amber)">◆ Gates</h3><p>The agent stops at Planned and In Review. You approve by moving the card or commenting <span class="mono">/approve</span>. Comments become feedback for the next run.</p></div>
+      <div class="block"><h3>Done is yours</h3><p>Only you move a card to Done. The agent posts a closing comment by script, with no model call.</p></div>
     </div>
-    <div class="launch">
-      <p class="cmd">./launch.sh &lt;harness&gt; --continue &lt;phòng&gt;</p>
-      <p>Vào đúng phòng đó và phiên đã gắn. Thư mục làm việc vẫn là repo.</p>
-    </div>
-    <div class="launch">
-      <p class="cmd">./launch.sh &lt;harness&gt; --room-name &lt;phòng&gt; --agent ba-user "…"</p>
-      <p>BA hỏi trong cùng phòng CEO. Thiếu tên phòng thì lệnh dừng, không tạo phòng mới.</p>
-    </div>
-    <p class="dim" style="margin-top:18px;font-size:24px">Harness là grok, claude, codex, hoặc merge. Mặc định là CEO.</p>
-    <p class="footer"><span>MỞ PHIÊN</span><span>11</span></p>`,
+    <p class="footer"><span>JIRA FLOW</span><span>04</span></p>`,
   () => `
-    <p class="kicker">DEMO  2 / 3</p>
-    <h2 style="font-size:46px;margin-bottom:8px">--continue mở đúng danh sách phòng này.</h2>
-    <div class="term">
-      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>shop — zsh</span></div>
-      <div class="term-body">
-        <div><span class="ps">$</span> ./launch.sh grok --continue</div>
-        <div class="dimline">↑ lên &nbsp;&nbsp; ↓ xuống &nbsp;&nbsp; Enter chọn &nbsp;&nbsp; Ctrl+C exit</div>
-        <div class="pick on">&gt; 2 hours ago &nbsp; empty-state</div>
-        <div class="pick"> &nbsp; yesterday &nbsp; checkout</div>
-        <div class="pick"> &nbsp; 3 days ago &nbsp; shop-20261101-091500</div>
-        <div class="pick"> &nbsp; 1 week ago &nbsp; onboarding</div>
-        <div class="dimline" style="margin-top:12px">[launch] resume empty-state</div>
-      </div>
-    </div>
-    <p class="dim" style="margin-top:14px;font-size:22px">Dữ liệu giả. Enter vào phòng đang chọn. BA cùng phòng: ./launch.sh grok --room-name empty-state --agent ba-user "…"</p>
-    <p class="footer"><span>DEMO · PHÒNG</span><span>12</span></p>`,
-  () => `
-    <p class="kicker">13  /  CỔNG VAI</p>
-    <h2>Launch gắn cổng. grok trần thì chưa.</h2>
-    <div class="cols c2" style="margin-top:28px">
-      <div class="block"><h3>CEO và lead</h3><p>Chỉ giao. Hook chặn sửa file và một chuỗi lệnh.</p></div>
-      <div class="block"><h3>PO</h3><p>Chỉ ghi cache/plans, rồi plan_history.py sync.</p></div>
-      <div class="block"><h3>Kỹ sư</h3><p>Sửa code sản phẩm. Không ghi plan.</p></div>
-      <div class="block"><h3>Hỏi người dùng</h3><p>Lựa chọn thuộc ba-user. CEO chuyển việc sang đó.</p></div>
-    </div>
-    <p class="footer"><span>CỔNG VAI</span><span>13</span></p>`,
-  () => `
-    <p class="kicker">14  /  MỘT CÂU ĐI ĐÂU</p>
-    <h2>CEO đọc cache, giao một người.</h2>
+    <p class="kicker">03  /  FLOWS THAT FIT THE WORK</p>
+    <h2>Each company has its own flow. Each task has a flow type.</h2>
     <table>
-      <thead><tr><th>VIỆC</th><th>QUA</th><th>ĐẾN</th></tr></thead>
+      <thead><tr><th>FLOW TYPE</th><th>STAGES</th><th>USE FOR</th></tr></thead>
       <tbody>
-        <tr><td>Làm rõ</td><td>ba-lead</td><td class="win">ba-user</td></tr>
-        <tr><td>Plan mới / sửa plan</td><td>po-lead</td><td class="win">po-new / po-modify</td></tr>
-        <tr><td>Xây</td><td>tech-lead</td><td class="win">một kỹ sư</td></tr>
-        <tr><td>Kiểm / kiến trúc</td><td>qc-lead / cto</td><td class="win">user-qc / tech-lead</td></tr>
+        <tr><td class="mono" style="color:var(--green)">full</td><td>every stage</td><td class="dim">features with real design work</td></tr>
+        <tr><td class="mono" style="color:var(--green)">no_plan</td><td>no Planned or Pre Coding</td><td class="dim">clear, small changes</td></tr>
+        <tr><td class="mono" style="color:var(--green)">no_dev</td><td>analysis only, no code</td><td class="dim">docs, questions, research</td></tr>
+        <tr><td class="mono" style="color:var(--green)">quick</td><td>Coding → QC → In Review</td><td class="dim">tiny obvious fixes</td></tr>
       </tbody>
     </table>
-    <p class="footer"><span>ĐIỀU PHỐI</span><span>14</span></p>`,
+    <p class="dim" style="font-size:24px;margin-top:26px"><span class="mono" style="color:var(--green)">/flow edit</span> designs custom columns, gates, on-enter actions (open_pr, merge into develop) and branch names. <span class="mono" style="color:var(--green)">/flow KAN-7 quick</span> or an <span class="mono">ah-flow:</span> label changes a task's flow mid-work, and the card is remapped with a notice.</p>
+    <p class="footer"><span>FLOWS</span><span>05</span></p>`,
   () => `
-    <p class="kicker">15  /  PLAN</p>
-    <h2>Ba mục. Đúng thứ tự. Có điểm dừng.</h2>
-    <div class="cols c3">
-      <div class="block"><span class="idx">Problem</span><p>Vì sao plan tồn tại. Thiếu gì, và phần đã có mà giải pháp phải khớp.</p></div>
-      <div class="block"><span class="idx">Work</span><p>Ai làm, đường dẫn nào, điều kiện chấp nhận từng phần.</p></div>
-      <div class="block"><span class="idx">Final expect</span><p>Trạng thái cuối kiểm được. Kỹ sư dừng khi mọi dòng đúng.</p></div>
+    <p class="kicker">03  /  COMMANDS</p>
+    <h2>Work starts from a sentence and ends in a PR, if you want one.</h2>
+    <div class="launch"><p class="cmd">/new-task add a reset button to the counter</p><p>Staff writes a proper Jira issue in To Do. It starts when you drag it.</p></div>
+    <div class="launch"><p class="cmd">/split KAN-12</p><p>Splits a big issue into sub-tasks in To Do, each with its own flow.</p></div>
+    <div class="launch"><p class="cmd">/auto-pr on</p><p>Off by default, set per company. When on, In Review pushes the branch and opens a PR with <span class="mono">gh</span>, and merge stages run <span class="mono">gh pr merge</span>. It never forces a merge. When off, branches stay local.</p></div>
+    <div class="launch"><p class="cmd">/usage  ·  /tasks  ·  /plan KAN-1  ·  /approve KAN-1</p><p>Tokens per task and stage, open tasks, plans and approvals, all from your agent.</p></div>
+    <p class="footer"><span>COMMANDS</span><span>06</span></p>`,
+  () => `
+    <p class="kicker">04  /  SETUP</p>
+    <h2 style="font-size:52px">One command, then a checklist that ticks itself.</h2>
+    <div class="steps">
+      <div class="step"><b>1  /connect-jira KAN</b><span>Reads the board with your Atlassian MCP, then opens a setup page with columns, links and live status.</span></div>
+      <div class="step"><b>2  Webhook</b><span>Use the URL from the setup page (it has <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Events: issue created and updated, comment created.</span></div>
+      <div class="step"><b>3  Keychain token</b><span><span class="mono">scripts/jira-keychain-setup.sh &lt;site&gt; &lt;email&gt;</span> takes the API token at a hidden prompt and keeps it only in the macOS Keychain.</span></div>
+      <div class="step"><b>4  Columns</b><span>The script creates missing statuses. Then drag the columns into order with Done last, because Jira has no API to reorder them.</span></div>
     </div>
-    <p class="note mono" style="color:var(--green)">plan_history.py sync --company . --actor po-new</p>
-    <p class="footer"><span>PLAN</span><span>15</span></p>`,
-  () => `
-    <p class="kicker">DEMO  3 / 3</p>
-    <h2 style="font-size:46px;margin-bottom:8px">Một câu cho CEO. File plan có điểm dừng.</h2>
-    <div class="term">
-      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>cache/plans</span></div>
+    <div class="term" style="margin-top:34px">
+      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>agents-holding-server — zsh</span></div>
       <div class="term-body">
-        <div><span class="ps">$</span> ./launch.sh grok --continue empty-state "việc cần plan"</div>
-        <div class="dimline">[launch] agent=ceo room=empty-state</div>
-        <div style="margin-top:12px"><span class="ps">$</span> sed -n '1,20p' cache/plans/&lt;plan&gt;.md</div>
-        <div>## Problem</div>
-        <div>## Work</div>
-        <div>## Final expect</div>
-        <div class="dimline">python3 system/install/plan_history.py sync --company . --actor po-new</div>
+        <div><span class="ps">$</span> scripts/holding listener on --repo ~/Code/shop <span class="dimline">  # start now</span></div>
+        <div><span class="ps">$</span> scripts/holding listener autostart on <span class="dimline">          # also at login</span></div>
+        <div><span class="ps">$</span> scripts/holding listener off <span class="dimline">                    # stop now and turn off autostart</span></div>
+        <div><span class="ps">$</span> scripts/holding doctor <span class="dimline">                          # or /doctor: checks every step</span></div>
       </div>
     </div>
-    <p class="footer"><span>DEMO · PLAN</span><span>16</span></p>`,
+    <p class="footer"><span>SETUP · SAMPLE VALUES</span><span>07</span></p>`,
   () => `
-    <p class="kicker">17  /  PHÒNG</p>
-    <h2>Phòng đã chiếu ở demo. Thư mục làm việc vẫn là repo.</h2>
-    <p class="lead">--continue và --resume là cùng một cửa. Không lấy chat mới nhất của repo. BA và app Mac dùng tên phòng vừa chọn.</p>
-    <p class="footer"><span>PHÒNG</span><span>17</span></p>`,
+    <p class="kicker">04  /  TOKENS  ·  MEASURED ON KAN-1</p>
+    <h2 style="font-size:52px">Same task, input tokens. The lean flow costs less than a direct prompt.</h2>
+    <table>
+      <thead><tr><th>HOW KAN-1 WAS DONE</th><th>INPUT TOKENS</th><th>VS DIRECT</th></tr></thead>
+      <tbody>
+        <tr><td>Direct prompt (one chat)</td><td class="n">190,842</td><td class="n">1.00×</td></tr>
+        <tr><td>Jira flow, before optimization</td><td class="n">3,022,094</td><td class="n">15.8×</td></tr>
+        <tr><td>Jira flow, first optimization</td><td class="n">776,973</td><td class="n">4.07×</td></tr>
+        <tr><td>Lean Jira flow (today)</td><td class="n win">112,693</td><td class="n win">0.59×</td></tr>
+      </tbody>
+    </table>
+    <p class="dim" style="font-size:23px;margin-top:22px">The lean flow uses scripts for Jira, git and comments, a cheap model for the plan stage, and one coding call with no MCP servers attached. Done, moves and merges make no model call.</p>
+    <p class="note" style="bottom:70px;font-size:18px">Measured on one sample task (KAN-1), so results on other tasks will vary.</p>
+    <p class="footer"><span>TOKEN COMPARISON</span><span>08</span></p>`,
   () => `
-    <p class="kicker">18  /  CÔNG TY KHÁC</p>
-    <h2>Hop bằng launch của nơi nhận việc.</h2>
-    <div class="rowline"><span>Cha sang con</span><span class="mono" style="color:var(--green)">launch.sh grok &lt;con&gt; "mục tiêu ngắn"</span></div>
-    <div class="rowline"><span>Con sang cha</span><span>CEO con gọi launch.sh của cha.</span></div>
-    <div class="rowline"><span>Công ty không họ</span><span>CEO đang mở, rồi holding-ceo, rồi launch của đích.</span></div>
-    <div class="rowline"><span>Thuê người</span><span>holding-hr. CEO sản phẩm không tự thuê.</span></div>
-    <p class="footer"><span>GIỮA CÁC CÔNG TY</span><span>18</span></p>`,
-  () => `
-    <p class="kicker">19  /  APP MAC  ·  ĐÃ CÓ, CHẠY CHƯA ỔN</p>
-    <h2>App đã có. Cửa sổ nhìn công ty, chạy chưa ổn.</h2>
-    <div class="cols c2" style="margin-top:12px">
-      <div class="block"><h3>Nhân sự</h3><p>Mở từng người. Skill và script nằm trên thẻ người đó.</p></div>
-      <div class="block"><h3>Plan theo chủ</h3><p>Plan hiện trên PO được ghi ở dòng owner:. Canvas công ty không liệt kê plan.</p></div>
-      <div class="block"><h3>Sửa tại chỗ</h3><p>Mở file plan, skill, script. Lưu đè đúng file đó. App không giữ bản sao.</p></div>
-      <div class="block"><h3>Mở phòng</h3><p>App gọi launch của công ty, kèm tên phòng. Thư mục làm việc vẫn là repo.</p></div>
-    </div>
-    <p class="footer"><span>APP MAC</span><span>19</span></p>`,
-  () => `
-    <p class="kicker">20  /  SẮP TỚI</p>
-    <h2>Hai việc sẽ làm thêm để đỡ đốt token.</h2>
-    <div class="cols c2" style="gap:56px;margin-top:28px">
-      <div>
-        <p class="bench-k">Jev</p>
-        <p class="lead" style="font-size:32px;margin-top:16px">Dùng Jev để tối ưu token. Chưa có trong bản đang chạy. Là việc sắp làm.</p>
-      </div>
-      <div>
-        <p class="bench-k">Thêm script</p>
-        <p class="lead" style="font-size:32px;margin-top:16px">Việc lặp đưa vào script trên đúng staff. Model không phải làm lại bước đó trong chat.</p>
-      </div>
-    </div>
-    <p class="footer"><span>SẮP TỚI</span><span>20</span></p>`,
-  () => `
-    <p class="kicker">21  /  HẠN CHẾ</p>
-    <h2 style="font-size:48px">Bốn giới hạn đang có.</h2>
-    <div class="cols c2" style="margin-top:8px">
-      <div class="block"><h3>Context lâu</h3><p>CEO tự làm việc thay vì phân việc. Mở lại phòng, đừng kéo một phiên thật dài.</p></div>
-      <div class="block"><h3>Grok trần</h3><p>Mở grok trong repo không gắn cổng vai. Phải vào bằng launch.sh.</p></div>
-      <div class="block"><h3>Hai kênh nói</h3><p>Phòng chỉ có CEO và BA. Kỹ sư, PO, QC là người được giao, không phải một cuộc chat riêng.</p></div>
-      <div class="block"><h3>BA và tuyển người</h3><p>BA cần tên phòng CEO đã có. Công ty không tự thuê staff. Việc đó qua holding-hr.</p></div>
-    </div>
-    <p class="footer"><span>HẠN CHẾ</span><span>21</span></p>`,
-  () => `
-    <p class="kicker">22  /  KẾT</p>
-    <p class="giant">Mở repo.<br>Về phòng.<br>Nói một câu.</p>
-    <p class="lead dim">CEO giao một người. Context lâu thì mở lại phòng, không để CEO tự làm.</p>
-    <p class="footer"><span>AGENTS HOLDING</span><span>22</span></p>`
+    <p class="kicker">END</p>
+    <p class="giant">Drag a card.<br>Approve the plan.<br>Review the branch.</p>
+    <p class="lead dim">The server keeps the flow. Scripts do the busywork. The model only does the thinking.</p>
+    <p class="footer"><span>AGENTS HOLDING</span><span>09</span></p>`
 ];
 
 const stage = document.getElementById("stage");
@@ -427,9 +253,11 @@ addEventListener("hashchange", () => {
   const n = parseInt(location.hash.slice(1), 10);
   if (Number.isFinite(n)) show(n - 1);
 });
+if (/all/.test(location.search + location.hash)) { document.body.classList.add("all"); [...stage.children].forEach((el) => el.classList.add("on")); } else {
 fit();
 const start = parseInt(location.hash.slice(1), 10);
 show(Number.isFinite(start) ? start - 1 : 0);
+}
 </script>
 </body>
 </html>

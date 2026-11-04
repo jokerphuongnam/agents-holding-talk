@@ -108,9 +108,13 @@
   body.all .stage { position: static; transform: none; margin: 0 auto 24px; height: auto; background: none; overflow: visible; }
   body.all .stage::before { display: none; }
   body.all .slide { display: block; height: 900px; background: var(--stage); margin-bottom: 24px; }
+  #lang { position: fixed; top: 14px; right: 14px; z-index: 10; display: flex; gap: 4px; font-family: ui-monospace, Consolas, monospace; }
+  #lang button { background: rgba(16,22,20,.85); color: var(--dim); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+  #lang button.on { color: #10210c; background: var(--green); border-color: var(--green); }
 </style>
 </head>
 <body>
+<div id="lang"><button data-l="en">EN</button><button data-l="vi">VI</button></div>
 <div class="stage" id="stage"></div>
 <script>
 const slides = [
@@ -229,14 +233,144 @@ const slides = [
     <p class="footer"><span>AGENTS HOLDING</span><span>10</span></p>`
 ];
 
+const slidesVi = [
+  () => `
+    <p class="kicker">AGENTS HOLDING  ·  NHÂN SỰ AI ĐIỀU KHIỂN BẰNG JIRA  ·  THÁNG 11/2026</p>
+    <h1>Một công ty agent<br>cho mỗi sản phẩm.</h1>
+    <p class="lead">Kéo một thẻ Jira. Grok agent trên máy bạn lập kế hoạch, viết code, kiểm thử và báo lại, còn MCP server được host sẵn giữ cho quy trình luôn đúng.</p>
+    <div class="agenda" style="margin-top:56px">
+      <div><b>01  Kiến trúc</b><span>Một MCP server được host và một Grok agent chạy trên máy.</span></div>
+      <div><b>02  License</b><span>Nhãn, gia hạn trực tiếp và key mua từ marketplace.</span></div>
+      <div><b>03  Quy trình Jira</b><span>Cổng duyệt, ai quyết định gì, flow tuỳ chỉnh, loại flow từng task, /new-task, /split, /auto-pr.</span></div>
+      <div><b>04  Cài đặt và token</b><span>/connect-jira, Keychain, listener, /doctor và mức tiết kiệm đo được.</span></div>
+    </div>
+    <p class="footer"><span>AGENTS HOLDING</span><span>01</span></p>`,
+  () => `
+    <p class="kicker">01  /  KIẾN TRÚC</p>
+    <h2>Server giữ luật chơi. Máy Mac của bạn làm việc.</h2>
+    <div class="cols c3" style="margin-top:24px">
+      <div class="block"><span class="idx">Server</span><h3>MCP server</h3><p>Được host sẵn cho bạn. Nó giữ luật, slash command, flow và kiểm tra license, đồng thời tách riêng dữ liệu của từng công ty theo license.</p></div>
+      <div class="block"><span class="idx">Mac</span><h3>Grok agent trên máy</h3><p>Listener nhận thông báo và chạy Grok trong repo của bạn. Git, đọc Jira, comment và chuyển thẻ đều là script. Model chỉ viết kế hoạch và code, rồi trả về JSON có cấu trúc.</p></div>
+      <div class="block"><span class="idx">Jira</span><h3>Board chính là giao diện</h3><p>Bạn kéo thẻ và comment. Agent trả lời bằng comment <span class="mono">[agents-holding]</span> và chuyển thẻ khi xong một bước.</p></div>
+    </div>
+    <p class="note">Code của bạn không bao giờ rời khỏi máy. Server chỉ thấy tiêu đề, artifact và số token.</p>
+    <p class="footer"><span>KIẾN TRÚC</span><span>02</span></p>`,
+  () => `
+    <p class="kicker">02  /  LICENSE</p>
+    <h2>Một key, nhiều công ty. Cách gia hạn tuỳ nơi bạn mua.</h2>
+    <div>
+      <div class="rowline"><span class="path">Key license</span><span>Mỗi request gắn với key. Một key chứa nhiều công ty, mỗi repo gắn với một công ty.</span></div>
+      <div class="rowline"><span class="path">Nhãn</span><span>Chủ sở hữu gắn nhãn cho key (<span class="mono">/admin licenses label</span>) để dễ tìm từng khách hàng và seat.</span></div>
+      <div class="rowline"><span class="path">Key trực tiếp</span><span><span class="mono">/renew</span> tạo sẵn email (<span class="mono">[RENEW] &lt;license id&gt;</span>). Key cũ vẫn tiếp tục dùng được.</span></div>
+      <div class="rowline"><span class="path">Key marketplace</span><span>Không gia hạn ở đây được. Trợ lý sẽ hướng dẫn khách mua lại trên marketplace đó, kèm liên hệ hỗ trợ.</span></div>
+      <div class="rowline"><span class="path">Hết hạn</span><span>Cảnh báo trước 7 ngày. Sau khi hết hạn, dữ liệu vẫn được giữ và các tool tạm dừng đến khi gia hạn. <span class="mono">/whoami</span> hiện gói và ngày hết hạn.</span></div>
+    </div>
+    <p class="footer"><span>LICENSE</span><span>03</span></p>`,
+  () => `
+    <p class="kicker">03  /  QUY TRÌNH JIRA</p>
+    <h2 style="font-size:52px">Thẻ mới nằm chờ ở To Do. Kéo sang In Progress là bắt đầu.</h2>
+    <p class="path" style="font-size:25px;line-height:1.7">To Do → <span style="color:var(--ink)">In Progress</span> → Product Work → BA Question → <span style="color:var(--amber)">Planned ◆</span> → Pre Coding → Coding → QC → <span style="color:var(--amber)">In Review ◆</span> → Done</p>
+    <div class="cols c3" style="margin-top:36px">
+      <div class="block"><h3>Agent</h3><p>Phân tích, đặt câu hỏi (BA Question), viết kế hoạch, rồi kế hoạch kỹ thuật, code và QC. Server kiểm tra mỗi lần chuyển cột đều có artifact.</p></div>
+      <div class="block"><h3 style="color:var(--amber)">◆ Cổng duyệt</h3><p>Agent dừng ở Planned và In Review. Bạn duyệt bằng cách kéo thẻ hoặc comment <span class="mono">/approve</span>. Comment trở thành góp ý cho lần chạy sau.</p></div>
+      <div class="block"><h3>Done là của bạn</h3><p>Chỉ bạn mới chuyển thẻ sang Done. Agent đăng comment kết thúc bằng script, không gọi model.</p></div>
+    </div>
+    <p class="footer"><span>QUY TRÌNH JIRA</span><span>04</span></p>`,
+  () => `
+    <p class="kicker">03  /  NGƯỜI, AI HAY SCRIPT QUYẾT ĐỊNH?  ·  FLOW MẶC ĐỊNH</p>
+    <h2 style="font-size:46px;margin:0 0 6px">Bạn quyết ở các cổng. AI suy nghĩ. Script lo phần còn lại.</h2>
+    <p style="margin:0 0 4px;font-size:18px;color:var(--dim)"><span style="color:#e7a15a">■ người quyết định</span>   <span style="color:#6db3f2">■ model AI</span>   <span style="color:#c6f26d">■ script / tự động</span>   ·   Đây là flow <b style="color:var(--ink)">mặc định</b>. Tuỳ chỉnh flow của bạn: template <span class="mono">ah-flow</span>, flow công ty ở <span class="mono">/connect-jira</span>, hoặc flow riêng.</p>
+    <svg viewBox="0 0 1424 430" width="1424" height="430" font-family="Avenir Next, Segoe UI, sans-serif"><defs><marker id="ao" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#e7a15a"/></marker><marker id="ab" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6db3f2"/></marker><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c6f26d"/></marker></defs><rect x="22" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#e7a15a" stroke-width="2"/><text x="101.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">To Do</text><text x="101.0" y="99" text-anchor="middle" font-size="14" fill="#e7a15a">chờ bạn</text><rect x="225" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#c6f26d" stroke-width="2"/><text x="304.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">In Progress</text><text x="304.0" y="99" text-anchor="middle" font-size="14" fill="#c6f26d">bắt đầu chạy</text><rect x="428" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#6db3f2" stroke-width="2"/><text x="507.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Product Work</text><text x="507.0" y="99" text-anchor="middle" font-size="14" fill="#6db3f2">AI · BA/PO phân tích</text><rect x="631" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#e7a15a" stroke-width="3"/><text x="710.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Planned ◆</text><text x="710.0" y="99" text-anchor="middle" font-size="14" fill="#e7a15a">cổng · bạn duyệt</text><rect x="834" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#6db3f2" stroke-width="2"/><text x="913.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Pre Coding</text><text x="913.0" y="99" text-anchor="middle" font-size="14" fill="#6db3f2">AI · kế hoạch kỹ thuật</text><rect x="1037" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#6db3f2" stroke-width="2"/><text x="1116.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Coding</text><text x="1116.0" y="99" text-anchor="middle" font-size="14" fill="#6db3f2">AI · feature/&lt;KEY&gt;</text><rect x="1240" y="44" width="158" height="74" rx="10" fill="#0b1210" stroke="#c6f26d" stroke-width="2"/><text x="1319.0" y="74" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">QC</text><text x="1319.0" y="99" text-anchor="middle" font-size="14" fill="#c6f26d">script · test so baseline</text><rect x="428" y="196" width="158" height="74" rx="10" fill="#0b1210" stroke="#6db3f2" stroke-width="2"/><text x="507.0" y="226" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">BA Question</text><text x="507.0" y="251" text-anchor="middle" font-size="14" fill="#6db3f2">AI hỏi bạn</text><rect x="1240" y="348" width="158" height="74" rx="10" fill="#0b1210" stroke="#c6f26d" stroke-width="2"/><text x="1319.0" y="378" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Auto-PR</text><text x="1319.0" y="403" text-anchor="middle" font-size="14" fill="#c6f26d">script · chỉ khi BẬT</text><rect x="1037" y="348" width="158" height="74" rx="10" fill="#0b1210" stroke="#e7a15a" stroke-width="3"/><text x="1116.0" y="378" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">In Review ◆</text><text x="1116.0" y="403" text-anchor="middle" font-size="14" fill="#e7a15a">cổng · bạn review</text><rect x="834" y="348" width="158" height="74" rx="10" fill="#0b1210" stroke="#e7a15a" stroke-width="2"/><text x="913.0" y="378" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Done</text><text x="913.0" y="403" text-anchor="middle" font-size="14" fill="#e7a15a">chỉ bạn</text><rect x="631" y="348" width="158" height="74" rx="10" fill="#0b1210" stroke="#c6f26d" stroke-width="2"/><text x="710.0" y="378" text-anchor="middle" font-size="20" font-weight="600" fill="#f4f0e6">Học thói quen</text><text x="710.0" y="403" text-anchor="middle" font-size="14" fill="#c6f26d">script + 1 lệnh rẻ</text><path d="M180 81.0 L221 81.0" fill="none" stroke="#e7a15a" stroke-width="2.5" marker-end="url(#ao)"/><text x="202.5" y="34" text-anchor="middle" font-size="15" font-weight="600" fill="#e7a15a">NGƯỜI kéo thẻ</text><path d="M383 81.0 L424 81.0" fill="none" stroke="#c6f26d" stroke-width="2.5" marker-end="url(#ag)"/><path d="M586 81.0 L627 81.0" fill="none" stroke="#6db3f2" stroke-width="2.5" marker-end="url(#ab)"/><text x="608.5" y="34" text-anchor="middle" font-size="15" font-weight="600" fill="#6db3f2">kế hoạch</text><path d="M789 81.0 L830 81.0" fill="none" stroke="#e7a15a" stroke-width="2.5" marker-end="url(#ao)"/><text x="811.5" y="34" text-anchor="middle" font-size="15" font-weight="600" fill="#e7a15a">NGƯỜI duyệt</text><path d="M992 81.0 L1033 81.0" fill="none" stroke="#6db3f2" stroke-width="2.5" marker-end="url(#ab)"/><path d="M1195 81.0 L1236 81.0" fill="none" stroke="#6db3f2" stroke-width="2.5" marker-end="url(#ab)"/><text x="1217.5" y="10" text-anchor="middle" font-size="15" font-weight="600" fill="#c6f26d">lỗi mới → sửa 1 lần</text><path d="M1319.0 44 C1319.0 14 1116.0 14 1116.0 40" fill="none" stroke="#c6f26d" stroke-width="2.5" marker-end="url(#ag)"/><path d="M477.0 118 L477.0 192" fill="none" stroke="#6db3f2" stroke-width="2.5" marker-end="url(#ab)"/><text x="469.0" y="162" text-anchor="end" font-size="15" font-weight="600" fill="#6db3f2">câu hỏi</text><path d="M537.0 196 L537.0 122" fill="none" stroke="#e7a15a" stroke-width="2.5" marker-end="url(#ao)"/><text x="545.0" y="162" text-anchor="start" font-size="15" font-weight="600" fill="#e7a15a">NGƯỜI trả lời</text><text x="545.0" y="180" text-anchor="start" font-size="15" font-weight="600" fill="#e7a15a">bằng comment</text><rect x="630.0" y="202" width="160" height="60" rx="10" fill="none" stroke="#e7a15a" stroke-dasharray="6 5"/><text x="710.0" y="227" text-anchor="middle" font-size="15" font-weight="600" fill="#e7a15a">NGƯỜI comment</text><text x="710.0" y="248" text-anchor="middle" font-size="14" fill="#9aa398">sửa kế hoạch, giữ nguyên</text><path d="M680.0 118 L680.0 198" fill="none" stroke="#e7a15a" stroke-width="2.5" marker-end="url(#ao)"/><path d="M740.0 202 L740.0 122" fill="none" stroke="#6db3f2" stroke-width="2.5" marker-end="url(#ab)"/><path d="M1319.0 118 L1319.0 344" fill="none" stroke="#c6f26d" stroke-width="2.5" marker-end="url(#ag)"/><text x="1327.0" y="236" text-anchor="start" font-size="15" font-weight="600" fill="#c6f26d">đạt</text><path d="M1240 385.0 L1199 385.0" fill="none" stroke="#c6f26d" stroke-width="2.5" marker-end="url(#ag)"/><path d="M1037 385.0 L996 385.0" fill="none" stroke="#e7a15a" stroke-width="2.5" marker-end="url(#ao)"/><text x="1014.5" y="338" text-anchor="middle" font-size="15" font-weight="600" fill="#e7a15a">NGƯỜI kéo thẻ</text><path d="M834 385.0 L793 385.0" fill="none" stroke="#c6f26d" stroke-width="2.5" marker-end="url(#ag)"/><path d="M1116.0 348 L1116.0 122" fill="none" stroke="#e7a15a" stroke-width="2.5" marker-end="url(#ao)"/><text x="1108.0" y="226" text-anchor="end" font-size="15" font-weight="600" fill="#e7a15a">NGƯỜI comment review</text><text x="1108.0" y="246" text-anchor="end" font-size="15" font-weight="600" fill="#e7a15a">→ cùng developer</text></svg>
+    <div class="cols c2" style="margin-top:4px;gap:48px">
+      <div class="block"><h3 style="font-size:20px;color:#e7a15a;margin-bottom:6px">Những quyết định khác của người</h3><p style="font-size:17px;line-height:1.4">Loại flow của task: nhãn <span class="mono">ah-flow:full|no_plan|no_dev|quick</span> · flow công ty ở <span class="mono">/connect-jira</span> · bật/tắt auto-PR · chọn repo khi một board dùng cho nhiều repo (<span class="mono">repo:&lt;name&gt;</span>) · task do staff tạo nằm ở To Do đến khi bạn kéo.</p></div>
+      <div class="block"><h3 style="font-size:20px;color:#6db3f2;margin-bottom:6px">Cách chọn staff</h3><p style="font-size:17px;line-height:1.4">Người phụ trách mỗi bước lấy từ bảng cố định (BA/PO, Tech Lead, QC). Ở Pre Coding, AI chọn developer theo kỹ năng trong roster và script kiểm tra lại lựa chọn đó. <span class="mono">/ceo</span> gợi ý người phụ trách bằng chấm điểm theo luật.</p></div>
+    </div>
+    <p class="footer"><span>QUYỀN QUYẾT ĐỊNH · FLOW MẶC ĐỊNH</span><span>05</span></p>`,
+  () => `
+    <p class="kicker">03  /  FLOW HỢP VỚI CÔNG VIỆC</p>
+    <h2>Mỗi công ty có flow riêng. Mỗi task có một loại flow.</h2>
+    <table>
+      <thead><tr><th>LOẠI FLOW</th><th>CÁC BƯỚC</th><th>DÙNG CHO</th></tr></thead>
+      <tbody>
+        <tr><td class="mono" style="color:var(--green)">full</td><td>đủ mọi bước</td><td class="dim">tính năng cần thiết kế thật sự</td></tr>
+        <tr><td class="mono" style="color:var(--green)">no_plan</td><td>bỏ Planned và Pre Coding</td><td class="dim">thay đổi nhỏ, rõ ràng</td></tr>
+        <tr><td class="mono" style="color:var(--green)">no_dev</td><td>chỉ phân tích, không code</td><td class="dim">tài liệu, câu hỏi, nghiên cứu</td></tr>
+        <tr><td class="mono" style="color:var(--green)">quick</td><td>Coding → QC → In Review</td><td class="dim">sửa lỗi nhỏ, hiển nhiên</td></tr>
+      </tbody>
+    </table>
+    <p class="dim" style="font-size:24px;margin-top:26px"><span class="mono" style="color:var(--green)">/flow edit</span> thiết kế cột, cổng duyệt, hành động khi vào cột (open_pr, merge vào develop) và tên branch tuỳ ý. <span class="mono" style="color:var(--green)">/flow KAN-7 quick</span> hoặc nhãn <span class="mono">ah-flow:</span> đổi flow của task giữa chừng, thẻ được ánh xạ lại kèm thông báo.</p>
+    <p class="footer"><span>FLOW</span><span>06</span></p>`,
+  () => `
+    <p class="kicker">03  /  LỆNH</p>
+    <h2>Việc bắt đầu từ một câu và kết thúc bằng một PR, nếu bạn muốn.</h2>
+    <div class="launch"><p class="cmd">/new-task thêm nút reset cho bộ đếm</p><p>Staff viết một issue Jira chuẩn ở To Do. Nó bắt đầu khi bạn kéo thẻ.</p></div>
+    <div class="launch"><p class="cmd">/split KAN-12</p><p>Chia issue lớn thành các sub-task ở To Do, mỗi cái có flow riêng.</p></div>
+    <div class="launch"><p class="cmd">/auto-pr on</p><p>Mặc định tắt, đặt theo từng công ty. Khi bật, In Review đẩy branch và mở PR bằng <span class="mono">gh</span>, các bước merge chạy <span class="mono">gh pr merge</span>. Không bao giờ ép merge. Khi tắt, branch chỉ nằm trên máy.</p></div>
+    <div class="launch"><p class="cmd">/usage  ·  /tasks  ·  /plan KAN-1  ·  /approve KAN-1</p><p>Token theo task và bước, task đang mở, kế hoạch và duyệt, tất cả ngay từ agent của bạn.</p></div>
+    <p class="footer"><span>LỆNH</span><span>07</span></p>`,
+  () => `
+    <p class="kicker">04  /  CÀI ĐẶT</p>
+    <h2 style="font-size:52px">Một lệnh, rồi một checklist tự đánh dấu.</h2>
+    <div class="steps">
+      <div class="step"><b>1  /connect-jira KAN</b><span>Đọc board bằng Atlassian MCP của bạn, rồi mở trang cài đặt với các cột, link và trạng thái trực tiếp.</span></div>
+      <div class="step"><b>2  Webhook Jira</b><span>Dùng URL từ trang cài đặt (có <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Sự kiện: tạo và cập nhật issue, tạo comment.</span></div>
+      <div class="step"><b>3  Token trong Keychain</b><span><span class="mono">scripts/jira-keychain-setup.sh &lt;site&gt; &lt;email&gt;</span> nhận API token qua ô nhập ẩn và chỉ lưu trong macOS Keychain.</span></div>
+      <div class="step"><b>4  Cột</b><span>Script tạo các trạng thái còn thiếu. Sau đó kéo các cột theo thứ tự, Done ở cuối, vì Jira không có API sắp xếp cột.</span></div>
+    </div>
+    <div class="term" style="margin-top:34px">
+      <div class="term-bar"><span class="dot" style="background:#e06a5c"></span><span class="dot" style="background:#e7b15a"></span><span class="dot" style="background:#8fce62"></span><span>agents-holding-server — zsh</span></div>
+      <div class="term-body">
+        <div><span class="ps">$</span> scripts/holding listener on --repo ~/Code/shop <span class="dimline">  # bật ngay</span></div>
+        <div><span class="ps">$</span> scripts/holding listener autostart on <span class="dimline">          # tự bật khi đăng nhập</span></div>
+        <div><span class="ps">$</span> scripts/holding listener off <span class="dimline">                    # tắt ngay và tắt autostart</span></div>
+        <div><span class="ps">$</span> scripts/holding doctor <span class="dimline">                          # hoặc /doctor: kiểm tra mọi bước</span></div>
+      </div>
+    </div>
+    <p class="footer"><span>CÀI ĐẶT · GIÁ TRỊ MẪU</span><span>08</span></p>`,
+  () => `
+    <p class="kicker">04  /  TOKEN  ·  ĐO TRÊN KAN-1</p>
+    <h2 style="font-size:52px">Cùng một task, token đầu vào. Flow tinh gọn tốn ít hơn cả prompt trực tiếp.</h2>
+    <table>
+      <thead><tr><th>CÁCH LÀM KAN-1</th><th>TOKEN ĐẦU VÀO</th><th>SO VỚI TRỰC TIẾP</th></tr></thead>
+      <tbody>
+        <tr><td>Prompt trực tiếp (một cuộc chat)</td><td class="n">190,842</td><td class="n">1.00×</td></tr>
+        <tr><td>Flow Jira, trước khi tối ưu</td><td class="n">3,022,094</td><td class="n">15.8×</td></tr>
+        <tr><td>Flow Jira, tối ưu lần đầu</td><td class="n">776,973</td><td class="n">4.07×</td></tr>
+        <tr><td>Flow Jira tinh gọn (hiện tại)</td><td class="n win">112,693</td><td class="n win">0.59×</td></tr>
+      </tbody>
+    </table>
+    <p class="dim" style="font-size:23px;margin-top:22px">Flow tinh gọn dùng script cho Jira, git và comment, một model rẻ cho bước lập kế hoạch, và một lệnh gọi code duy nhất không gắn MCP server nào. Done, chuyển thẻ và merge không gọi model.</p>
+    <p class="note" style="bottom:70px;font-size:18px">Đo trên một task mẫu (KAN-1), nên kết quả với task khác sẽ khác.</p>
+    <p class="footer"><span>SO SÁNH TOKEN</span><span>09</span></p>`,
+  () => `
+    <p class="kicker">KẾT</p>
+    <p class="giant">Kéo một thẻ.<br>Duyệt kế hoạch.<br>Review branch.</p>
+    <p class="lead dim">Server giữ quy trình. Script làm việc vặt. Model chỉ làm phần suy nghĩ.</p>
+    <p class="footer"><span>AGENTS HOLDING</span><span>10</span></p>`
+];
+
 const stage = document.getElementById("stage");
-slides.forEach((fn) => {
-  const el = document.createElement("section");
-  el.className = "slide";
-  el.innerHTML = fn();
-  stage.appendChild(el);
-});
+const qlang = new URLSearchParams(location.search).get("lang");
+let lang = (qlang === "vi" || qlang === "en") ? qlang : (localStorage.getItem("ah-lang") || "en");
 let i = 0;
+function render() {
+  const set = lang === "vi" ? slidesVi : slides;
+  stage.innerHTML = "";
+  set.forEach((fn) => { const el = document.createElement("section"); el.className = "slide"; el.innerHTML = fn(); stage.appendChild(el); });
+  document.documentElement.lang = lang;
+  document.title = lang === "vi" ? "Agents Holding · Nhân sự AI điều khiển bằng Jira" : "Agents Holding · Jira-driven AI staff";
+  const lb = document.getElementById("lang"); lb.title = lang === "vi" ? "Chọn ngôn ngữ" : "Language"; lb.querySelector("[data-l=en]").title = lang === "vi" ? "Tiếng Anh" : "English"; lb.querySelector("[data-l=vi]").title = lang === "vi" ? "Tiếng Việt" : "Vietnamese";
+  document.querySelectorAll("#lang button").forEach((b) => b.classList.toggle("on", b.dataset.l === lang));
+}
+function setLang(l) {
+  lang = l; localStorage.setItem("ah-lang", l);
+  const u = new URL(location.href); u.searchParams.set("lang", l); history.replaceState(null, "", u.pathname + u.search + location.hash);
+  render();
+  if (document.body.classList.contains("all")) [...stage.children].forEach((el) => el.classList.add("on")); else show(i);
+}
+document.querySelectorAll("#lang button").forEach((b) => b.addEventListener("click", (e) => {
+  if (e.target.closest("#lang")) return; e.stopPropagation(); setLang(b.dataset.l); }));
+render();
 function fit() {
   const s = Math.min(innerWidth / 1600, innerHeight / 900);
   stage.style.setProperty("--s", String(s));
@@ -245,7 +379,7 @@ function show(n) {
   i = (n + slides.length) % slides.length;
   [...stage.children].forEach((el, k) => el.classList.toggle("on", k === i));
   stage.style.setProperty("--p", ((i + 1) / slides.length * 100) + "%");
-  history.replaceState(null, "", "#" + (i + 1));
+  history.replaceState(null, "", location.pathname + location.search + "#" + (i + 1));
 }
 addEventListener("resize", fit);
 addEventListener("keydown", (e) => {
@@ -256,6 +390,7 @@ addEventListener("keydown", (e) => {
   else if (e.key === "f") document.documentElement.requestFullscreen?.();
 });
 addEventListener("click", (e) => {
+  if (e.target.closest("#lang")) return;
   if (e.clientX > innerWidth * 0.72) show(i + 1);
   else if (e.clientX < innerWidth * 0.28) show(i - 1);
 });

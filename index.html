@@ -352,6 +352,7 @@ const slidesVi = [
 const stage = document.getElementById("stage");
 const qlang = new URLSearchParams(location.search).get("lang");
 let lang = (qlang === "vi" || qlang === "en") ? qlang : (localStorage.getItem("ah-lang") || "en");
+if (qlang === "vi" || qlang === "en") localStorage.setItem("ah-lang", qlang);
 let i = 0;
 function render() {
   const set = lang === "vi" ? slidesVi : slides;
@@ -369,7 +370,7 @@ function setLang(l) {
   if (document.body.classList.contains("all")) [...stage.children].forEach((el) => el.classList.add("on")); else show(i);
 }
 document.querySelectorAll("#lang button").forEach((b) => b.addEventListener("click", (e) => {
-  if (e.target.closest("#lang")) return; e.stopPropagation(); setLang(b.dataset.l); }));
+  e.stopPropagation(); setLang(b.dataset.l); }));
 render();
 function fit() {
   const s = Math.min(innerWidth / 1600, innerHeight / 900);

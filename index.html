@@ -198,7 +198,7 @@ const slides = [
     <h2 style="font-size:52px">One command, then a checklist that ticks itself.</h2>
     <div class="steps">
       <div class="step"><b>1  /connect-jira KAN</b><span>Reads the board with your Atlassian MCP, then opens a setup page with columns, links and live status.</span></div>
-      <div class="step"><b>2  Webhook</b><span>Use the URL from the setup page (it has <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Events: issue created and updated, comment created.</span></div>
+      <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener keeps all Jira automation running.</b> In Jira's WebHooks menu, paste the URL from the setup page (it has <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Events: issue created and updated, comment created. Keep it on: <span class="mono">holding jira-listener start &amp;&amp; holding jira-listener autostart on</span>.</span></div>
       <div class="step"><b>3  Keychain token</b><span><span class="mono">scripts/jira-keychain-setup.sh &lt;site&gt; &lt;email&gt;</span> takes the API token at a hidden prompt and keeps it only in the macOS Keychain.</span></div>
       <div class="step"><b>4  Columns</b><span>The script creates missing statuses. Then drag the columns into order with Done last, because Jira has no API to reorder them.</span></div>
     </div>
@@ -321,7 +321,7 @@ const slidesVi = [
     <h2 style="font-size:52px">Một lệnh, rồi checklist tự tick dần.</h2>
     <div class="steps">
       <div class="step"><b>1  /connect-jira KAN</b><span>Đọc board qua Atlassian MCP của bạn, rồi mở trang cài đặt có sẵn cột, link và trạng thái.</span></div>
-      <div class="step"><b>2  Webhook</b><span>Lấy URL ở trang cài đặt (có <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Sự kiện: tạo/cập nhật issue, tạo comment.</span></div>
+      <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener là thứ giữ cho toàn bộ automation trên Jira chạy được.</b> Trong menu WebHooks của Jira, dán URL ở trang cài đặt (có <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Sự kiện: tạo/cập nhật issue, tạo comment. Luôn bật: <span class="mono">holding jira-listener start &amp;&amp; holding jira-listener autostart on</span>.</span></div>
       <div class="step"><b>3  Token vào Keychain</b><span><span class="mono">scripts/jira-keychain-setup.sh &lt;site&gt; &lt;email&gt;</span> hỏi API token (gõ ẩn) và chỉ lưu trong macOS Keychain.</span></div>
       <div class="step"><b>4  Sắp xếp cột</b><span>Script tự tạo các status còn thiếu. Bạn kéo các cột theo thứ tự, để Done cuối cùng, vì Jira không có API đổi thứ tự cột.</span></div>
     </div>

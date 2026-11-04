@@ -117,9 +117,9 @@ const slides = [
   () => `
     <p class="kicker">AGENTS HOLDING  ·  JIRA-DRIVEN AI STAFF  ·  NOVEMBER 2026</p>
     <h1>A company of agents<br>for every product.</h1>
-    <p class="lead">Drag a Jira card. Your local Grok agent plans, codes, tests and reports back, and a hosted Supabase server keeps the workflow honest.</p>
+    <p class="lead">Drag a Jira card. Your local Grok agent plans, codes, tests and reports back, and a hosted MCP server keeps the workflow honest.</p>
     <div class="agenda" style="margin-top:56px">
-      <div><b>01  Architecture</b><span>Supabase MCP server plus a local Grok agent.</span></div>
+      <div><b>01  Architecture</b><span>A hosted MCP server plus a local Grok agent.</span></div>
       <div><b>02  Licenses</b><span>Labels, direct renewals and marketplace keys.</span></div>
       <div><b>03  The Jira flow</b><span>Gates, custom flows, per-task flow types, /new-task, /split, /auto-pr.</span></div>
       <div><b>04  Setup and tokens</b><span>/connect-jira, the Keychain, the listener, /doctor, and measured savings.</span></div>
@@ -129,7 +129,7 @@ const slides = [
     <p class="kicker">01  /  ARCHITECTURE</p>
     <h2>The server owns the rules. Your Mac does the work.</h2>
     <div class="cols c3" style="margin-top:24px">
-      <div class="block"><span class="idx">Server</span><h3>Supabase MCP</h3><p>Edge functions: <span class="mono">mcp</span> (tools and slash commands), <span class="mono">jira-webhook</span> (board events) and <span class="mono">setup</span> (the checklist page). Postgres holds companies, tasks, flows, artifacts and usage, isolated per license.</p></div>
+      <div class="block"><span class="idx">Server</span><h3>MCP server</h3><p>Hosted for you. It holds the rules, slash commands, flows and license checks, and keeps each company's data isolated per license.</p></div>
       <div class="block"><span class="idx">Mac</span><h3>Local Grok agent</h3><p>The listener receives notices and runs Grok in your repo. Git, Jira reads, comments and card moves are scripts. The model only writes plans and code, and returns structured JSON.</p></div>
       <div class="block"><span class="idx">Jira</span><h3>Your board is the UI</h3><p>You drag cards and comment. Agents answer as <span class="mono">[agents-holding]</span> comments and move the card when a stage is done.</p></div>
     </div>

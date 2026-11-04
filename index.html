@@ -207,11 +207,11 @@ const slides = [
   () => `
     <p class="kicker">03  /  COMMANDS</p>
     <h2>Work starts from a sentence and ends in a PR, if you want one.</h2>
-    <div class="launch"><p class="cmd">/task add add a reset button to the counter</p><p>Staff writes a proper Jira issue in To Do. It starts when you drag it.</p></div>
-    <div class="launch"><p class="cmd">/task split KAN-12</p><p>Splits a big issue into sub-tasks in To Do, each with its own flow.</p></div>
+    <div class="launch"><p class="cmd">/task add add a reset button  ·  /task split KAN-12</p><p>Staff writes a proper Jira issue in To Do (it starts when you drag it), or splits a big one into sub-tasks.</p></div>
     <div class="launch"><p class="cmd">/company set auto-pr on</p><p>Off by default, set per company. When on, In Review pushes the branch and opens a PR with <span class="mono">gh</span>, and merge stages run <span class="mono">gh pr merge</span>. It never forces a merge. When off, branches stay local.</p></div>
     <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Tokens per task and stage, open tasks, plans and approvals, all from your agent.</p></div>
     <div class="launch"><p class="cmd">holding status  ·  holding inbox list  ·  holding inbox dismiss &lt;id&gt;</p><p>Status shows how many CEO inbox items are waiting. Answer one with <span class="mono">holding inbox reply &lt;id&gt; &lt;answer&gt;</span>, or close it without answering.</p></div>
+    <div class="launch"><p class="cmd">/ceo companies  ·  holding company show|create|pause|archive|link|config|migrate</p><p>Every company in your holding (children under parents): status, staff, Jira, tasks, credits.</p></div>
     <p class="footer"><span>COMMANDS</span><span>08</span></p>`,
   () => `
     <p class="kicker">04  /  SETUP</p>
@@ -366,11 +366,11 @@ const slidesVi = [
   () => `
     <p class="kicker">03  /  LỆNH</p>
     <h2>Bắt đầu từ một câu, kết thúc bằng một PR (nếu bạn muốn).</h2>
-    <div class="launch"><p class="cmd">/task add thêm nút reset cho bộ đếm</p><p>Staff viết thành issue Jira đầy đủ, để ở To Do. Bạn kéo thẻ thì mới chạy.</p></div>
-    <div class="launch"><p class="cmd">/task split KAN-12</p><p>Tách issue lớn thành nhiều sub-task ở To Do, mỗi cái một flow riêng.</p></div>
+    <div class="launch"><p class="cmd">/task add thêm nút reset  ·  /task split KAN-12</p><p>Staff viết thành issue Jira đầy đủ ở To Do (bạn kéo thẻ thì mới chạy), hoặc tách issue lớn thành sub-task.</p></div>
     <div class="launch"><p class="cmd">/company set auto-pr on</p><p>Mặc định tắt, bật theo từng công ty. Khi bật, tới In Review agent push branch và mở PR bằng <span class="mono">gh</span>; bước merge chạy <span class="mono">gh pr merge</span>, không bao giờ ép merge. Khi tắt, branch chỉ nằm trên máy.</p></div>
     <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Xem token theo task và từng bước, task đang mở, plan và duyệt, ngay trong agent của bạn.</p></div>
     <div class="launch"><p class="cmd">holding status  ·  holding inbox list  ·  holding inbox dismiss &lt;id&gt;</p><p>Status cho biết CEO inbox còn bao nhiêu việc chờ bạn. Trả lời bằng <span class="mono">holding inbox reply &lt;id&gt; &lt;câu trả lời&gt;</span>, hoặc đóng luôn nếu không cần trả lời.</p></div>
+    <div class="launch"><p class="cmd">/ceo companies  ·  holding company show|create|pause|archive|link|config|migrate</p><p>Mọi công ty trong holding (con nằm dưới mẹ): trạng thái, nhân sự, Jira, task, credit.</p></div>
     <p class="footer"><span>LỆNH</span><span>08</span></p>`,
   () => `
     <p class="kicker">04  /  CÀI ĐẶT</p>

@@ -254,10 +254,26 @@ const slides = [
     <p class="dim" style="font-size:17px;margin-top:20px">Details: <span class="mono">docs/RESILIENCE.md</span></p>
     <p class="footer"><span>RESILIENCE</span><span>11</span></p>`,
   () => `
+    <p class="kicker">ENTERPRISE</p>
+    <div class="block" style="font-size:17px;line-height:1.55"><div class="step">1. The key decides the role: owner or member.</div><div class="step">2. We set a negotiated seat limit for your company.</div><div class="step">3. One shared credit pool; the owner can cap each member.</div><div class="step">4. One company Jira board: the Jira Listener starts only when a card is assigned to you.</div><div class="step">5. Chat-first: <span class='mono'>/ceo KAN-12</span>. Results land in your CEO inbox.</div><div class="step">6. More seats or credits? Contact the owner — no self-upgrade.</div></div>
+    <p class="footer"><span>ENTERPRISE</span><span>13</span></p>`,
+  () => `
+    <p class="kicker">PRIVACY · SKILLS</p>
+    <div class="block" style="font-size:17px;line-height:1.55"><div class="step">1. We only record habits: when you work, chat vs comments, how you configure tools (such as models).</div><div class="step">2. Every tool you connect and data on your machine stay on your machine.</div><div class="step">3. Skills in <span class='mono'>skills/public/</span> are collected automatically, personal info filtered.</div><div class="step">4. Keep one private: <span class='mono'>holding skill set &lt;name&gt; private</span>.</div><div class="step">5. <span class='mono'>history/</span>, <span class='mono'>assets/</span> and personal files are never collected.</div><div class="step">6. Each tester gets credits matching a plan — tell us whether the plan feels right.</div></div>
+    <p class="footer"><span>PRIVACY</span><span>14</span></p>`,
+  () => `
+    <p class="kicker">SUB AGENTS</p>
+    <div class="block" style="font-size:17px;line-height:1.55"><div class="step">1. <span class='mono'>holding staff presets</span> — runners on this machine, local LLMs too.</div><div class="step">2. <span class='mono'>holding staff add backend-engineer --preset ollama</span></div><div class="step">3. Staff call it headless in the background. It never opens a chat.</div><div class="step">4. Wrong: install a local LLM and chat with it. Right: add it as a runner.</div></div>
+    <p class="footer"><span>SUB AGENTS</span><span>15</span></p>`,
+  () => `
+    <p class="kicker">COMMANDS</p>
+    <div class="block" style="font-size:14px;line-height:1.45;columns:2"><div class="step">1. <span class="mono">holding staff list</span> — your staff</div><div class="step">2. <span class="mono">holding staff add &lt;role&gt; [--preset id]</span> — hire + attach a runner</div><div class="step">3. <span class="mono">holding staff presets</span> — headless runners</div><div class="step">4. <span class="mono">holding staff test &lt;role&gt;</span> — try a runner</div><div class="step">5. <span class="mono">holding task list</span> — open tasks</div><div class="step">6. <span class="mono">holding task plan &lt;KEY&gt;</span> — the plan</div><div class="step">7. <span class="mono">holding jira list</span> — cards</div><div class="step">8. <span class="mono">holding inbox list</span> — CEO inbox</div><div class="step">9. <span class="mono">holding inbox reply &lt;id&gt;</span> — answer</div><div class="step">10. <span class="mono">holding skill where | check</span> — skill folders</div><div class="step">11. <span class="mono">holding skill set &lt;name&gt; private</span> — keep private</div><div class="step">12. <span class="mono">holding skill browse &lt;role&gt;</span> — library ideas</div><div class="step">13. <span class="mono">holding skill add &lt;role&gt; &lt;id&gt;</span> — install one</div><div class="step">14. <span class="mono">holding listener status</span> — Jira Listener</div><div class="step">15. <span class="mono">holding billing</span> — credits</div><div class="step">16. <span class="mono">holding doctor --server</span> — health check</div></div>
+    <p class="footer"><span>COMMANDS</span><span>16</span></p>`,
+  () => `
     <p class="kicker">END</p>
     <p class="giant">Drag a card.<br>Approve the plan.<br>Review the branch.</p>
     <p class="lead dim">The server keeps the flow. Scripts do the busywork. The model only does the thinking.</p>
-    <p class="footer"><span>AGENTS HOLDING</span><span>12</span></p>`
+    <p class="footer"><span>AGENTS HOLDING</span><span>17</span></p>`
 ];
 
 const slidesVi = [
@@ -397,10 +413,26 @@ const slidesVi = [
     <p class="dim" style="font-size:17px;margin-top:20px">Chi tiết: <span class="mono">docs/RESILIENCE.md</span></p>
     <p class="footer"><span>KHI CÓ SỰ CỐ</span><span>11</span></p>`,
   () => `
+    <p class="kicker">DOANH NGHIỆP</p>
+    <div class="block" style="font-size:17px;line-height:1.55"><div class="step">1. Key quyết định vai trò: owner hay thành viên.</div><div class="step">2. Số chỗ được thoả thuận và chúng tôi đặt cho công ty bạn.</div><div class="step">3. Một quỹ credit chung; owner có thể giới hạn từng người.</div><div class="step">4. Một board Jira chung: Jira Listener chỉ bắt đầu khi thẻ được giao cho bạn.</div><div class="step">5. Ưu tiên chat: <span class='mono'>/ceo KAN-12</span>. Kết quả về hộp thư CEO của bạn.</div><div class="step">6. Cần thêm chỗ hay credit? Liên hệ owner — không có tự nâng cấp.</div></div>
+    <p class="footer"><span>DOANH NGHIỆP</span><span>13</span></p>`,
+  () => `
+    <p class="kicker">QUYỀN RIÊNG TƯ · SKILL</p>
+    <div class="block" style="font-size:17px;line-height:1.55"><div class="step">1. Chúng tôi không lấy thông tin của bạn, chỉ ghi nhận thói quen sử dụng: giờ bạn hay làm việc, bạn dùng chat hay comment, và cách bạn cấu hình công cụ (như model).</div><div class="step">2. Mọi công cụ bạn kết nối và dữ liệu trên máy chỉ được dùng ngay trên máy bạn.</div><div class="step">3. Skill trong <span class='mono'>skills/public/</span> được tự động thu thập, đã lọc thông tin cá nhân.</div><div class="step">4. Muốn giữ riêng: <span class='mono'>holding skill set &lt;tên&gt; private</span>.</div><div class="step">5. <span class='mono'>history/</span>, <span class='mono'>assets/</span> và file cá nhân không bao giờ được thu thập.</div><div class="step">6. Mỗi người được cấp một lượng credit theo gói để dùng thử — dùng xong góp ý xem gói như vậy đã ổn chưa.</div></div>
+    <p class="footer"><span>QUYỀN RIÊNG TƯ</span><span>14</span></p>`,
+  () => `
+    <p class="kicker">SUB AGENT</p>
+    <div class="block" style="font-size:17px;line-height:1.55"><div class="step">1. <span class='mono'>holding staff presets</span> — các runner trên máy, có cả LLM chạy trên máy.</div><div class="step">2. <span class='mono'>holding staff add backend-engineer --preset ollama</span></div><div class="step">3. Nhân sự gọi nó chạy nền (headless). Không mở cửa sổ chat.</div><div class="step">4. Sai: cài LLM trên máy rồi mở chat với nó. Đúng: thêm nó làm runner.</div></div>
+    <p class="footer"><span>SUB AGENT</span><span>15</span></p>`,
+  () => `
+    <p class="kicker">CÁC LỆNH</p>
+    <div class="block" style="font-size:14px;line-height:1.45;columns:2"><div class="step">1. <span class="mono">holding staff list</span> — xem đội nhân sự</div><div class="step">2. <span class="mono">holding staff add &lt;role&gt; [--preset id]</span> — thêm người + gắn runner</div><div class="step">3. <span class="mono">holding staff presets</span> — các runner chạy nền</div><div class="step">4. <span class="mono">holding staff test &lt;role&gt;</span> — chạy thử runner</div><div class="step">5. <span class="mono">holding task list</span> — việc đang mở</div><div class="step">6. <span class="mono">holding task plan &lt;KEY&gt;</span> — xem kế hoạch</div><div class="step">7. <span class="mono">holding jira list</span> — các thẻ</div><div class="step">8. <span class="mono">holding inbox list</span> — hộp thư CEO</div><div class="step">9. <span class="mono">holding inbox reply &lt;id&gt;</span> — trả lời</div><div class="step">10. <span class="mono">holding skill where | check</span> — thư mục skill</div><div class="step">11. <span class="mono">holding skill set &lt;tên&gt; private</span> — giữ riêng</div><div class="step">12. <span class="mono">holding skill browse &lt;role&gt;</span> — gợi ý từ thư viện</div><div class="step">13. <span class="mono">holding skill add &lt;role&gt; &lt;id&gt;</span> — cài một skill</div><div class="step">14. <span class="mono">holding listener status</span> — Jira Listener</div><div class="step">15. <span class="mono">holding billing</span> — xem credit</div><div class="step">16. <span class="mono">holding doctor --server</span> — kiểm tra kết nối</div></div>
+    <p class="footer"><span>CÁC LỆNH</span><span>16</span></p>`,
+  () => `
     <p class="kicker">HẾT</p>
     <p class="giant">Kéo thẻ.<br>Duyệt plan.<br>Review branch.</p>
     <p class="lead dim">Server giữ quy trình. Script lo việc vặt. Model chỉ việc suy nghĩ.</p>
-    <p class="footer"><span>AGENTS HOLDING</span><span>12</span></p>`
+    <p class="footer"><span>AGENTS HOLDING</span><span>17</span></p>`
 ];
 
 const stage = document.getElementById("stage");

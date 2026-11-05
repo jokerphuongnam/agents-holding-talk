@@ -126,7 +126,7 @@ const slides = [
       <div><b>01  Architecture</b><span>A hosted MCP server plus a local AI agent.</span></div>
       <div><b>02  Keys and credits</b><span>Generate or import a key, plans, credits per action.</span></div>
       <div><b>03  The Jira flow</b><span>Gates, custom flows, per-task flow types, /task add, /task split, /company set auto-pr.</span></div>
-      <div><b>04  Setup and tokens</b><span>/jira setup, the Keychain, the listener, /doctor, and measured savings.</span></div>
+      <div><b>04  Setup and savings</b><span>/jira setup, the Keychain, the listener, /doctor, and measured savings.</span></div>
     </div>
     <p class="footer"><span>AGENTS HOLDING</span><span>01</span></p>`,
   () => `
@@ -137,7 +137,7 @@ const slides = [
       <div class="block"><span class="idx">Mac</span><h3>Local AI agent</h3><p>The Jira Listener receives notices and runs your agent CLI in your repo. Git, Jira reads, comments and card moves are scripts. The model only writes plans and code, and returns structured JSON.</p></div>
       <div class="block"><span class="idx">Jira</span><h3>Your board is the UI</h3><p>You drag cards and comment. Agents answer as <span class="mono">[agents-holding]</span> comments and move the card when a stage is done.</p></div>
     </div>
-    <p class="note">Your code never leaves your machine. The server only sees titles, artifacts and token counts.</p>
+    <p class="note">Your code never leaves your machine. The server only sees titles, artifacts and credit usage.</p>
     <p class="footer"><span>ARCHITECTURE</span><span>02</span></p>`,
   () => `
     <p class="kicker">02  /  KEYS</p>
@@ -152,7 +152,7 @@ const slides = [
     <p class="footer"><span>KEYS</span><span>03</span></p>`,
   () => `
     <p class="kicker">02  /  CREDITS</p>
-    <h2>You pay per action, not per token.</h2>
+    <h2>You pay per action, in credits.</h2>
     <style>.cr td,.cr th{padding:5px 0!important;font-size:20px!important}.cr th{font-size:13px!important}</style><table class="cr">
       <thead><tr><th>PLAN</th><th>CREDITS / MONTH</th><th>PLAN</th><th>CREDITS / MONTH</th></tr></thead>
       <tbody>
@@ -207,11 +207,11 @@ const slides = [
   () => `
     <p class="kicker">03  /  COMMANDS</p>
     <h2>Work starts from a sentence and ends in a PR, if you want one.</h2>
-    <div class="launch"><p class="cmd">/task add add a reset button to the counter</p><p>Staff writes a proper Jira issue in To Do. It starts when you drag it.</p></div>
-    <div class="launch"><p class="cmd">/task split KAN-12</p><p>Splits a big issue into sub-tasks in To Do, each with its own flow.</p></div>
+    <div class="launch"><p class="cmd">/task add add a reset button  ·  /task split KAN-12</p><p>Staff writes a proper Jira issue in To Do (it starts when you drag it), or splits a big one into sub-tasks.</p></div>
     <div class="launch"><p class="cmd">/company set auto-pr on</p><p>Off by default, set per company. When on, In Review pushes the branch and opens a PR with <span class="mono">gh</span>, and merge stages run <span class="mono">gh pr merge</span>. It never forces a merge. When off, branches stay local.</p></div>
-    <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Tokens per task and stage, open tasks, plans and approvals, all from your agent.</p></div>
+    <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Credits per task and stage, open tasks, plans and approvals, all from your agent.</p></div>
     <div class="launch"><p class="cmd">holding status  ·  holding inbox list  ·  holding inbox dismiss &lt;id&gt;</p><p>Status shows how many CEO inbox items are waiting. Answer one with <span class="mono">holding inbox reply &lt;id&gt; &lt;answer&gt;</span>, or close it without answering.</p></div>
+    <div class="launch"><p class="cmd">/ceo companies  ·  holding company show|create|pause|archive|link|config|migrate</p><p>Every company in your holding (children under parents): status, staff, Jira, tasks, credits.</p></div>
     <p class="footer"><span>COMMANDS</span><span>08</span></p>`,
   () => `
     <p class="kicker">04  /  SETUP</p>
@@ -219,7 +219,7 @@ const slides = [
     <div class="steps">
       <div class="step"><b>1  /jira setup KAN</b><span>Reads the board with your Atlassian MCP, then opens a setup page with columns, links and live status.</span></div>
       <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener keeps all Jira automation running.</b> In Jira's system settings, add the Jira Listener URL from the setup page (it has <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Events: issue created and updated, comment created. Keep it on: <span class="mono">holding listener start &amp;&amp; holding listener autostart on</span>.</span></div>
-      <div class="step"><b>3  Keychain token</b><span><span class="mono">holding jira connect &lt;site&gt; &lt;email&gt;</span> takes the API token at a hidden prompt and keeps it only in the macOS Keychain.</span></div>
+      <div class="step"><b>3  Keychain credential</b><span><span class="mono">holding jira connect &lt;site&gt; &lt;email&gt;</span> takes the API token at a hidden prompt and keeps it only in the macOS Keychain.</span></div>
       <div class="step"><b>4  Columns</b><span>The script creates missing statuses. Then drag the columns into order with Done last, because Jira has no API to reorder them.</span></div>
     </div>
     <div class="term" style="margin-top:34px">
@@ -233,10 +233,10 @@ const slides = [
     </div>
     <p class="footer"><span>SETUP · SAMPLE VALUES</span><span>09</span></p>`,
   () => `
-    <p class="kicker">04  /  TOKENS  ·  MEASURED ON KAN-1</p>
-    <h2 style="font-size:52px">Same task, input tokens. The lean flow costs less than a direct prompt.</h2>
+    <p class="kicker">04  /  SAVINGS  ·  MEASURED ON KAN-1</p>
+    <h2 style="font-size:52px">Same task, smaller prompts. The lean flow uses fewer model credits than a direct prompt.</h2>
     <table>
-      <thead><tr><th>HOW KAN-1 WAS DONE</th><th>INPUT TOKENS</th><th>VS DIRECT</th></tr></thead>
+      <thead><tr><th>HOW KAN-1 WAS DONE</th><th>PROMPT SIZE</th><th>VS DIRECT</th></tr></thead>
       <tbody>
         <tr><td>Direct prompt (one chat)</td><td class="n">190,842</td><td class="n">1.00×</td></tr>
         <tr><td>Jira flow, before optimization</td><td class="n">3,022,094</td><td class="n">15.8×</td></tr>
@@ -246,7 +246,7 @@ const slides = [
     </table>
     <p class="dim" style="font-size:23px;margin-top:22px">The lean flow uses scripts for Jira, git and comments, a cheap model for the plan stage, and one coding call with no MCP servers attached. Done, moves and merges make no model call.</p>
     <p class="note" style="bottom:70px;font-size:18px">Measured on one sample task (KAN-1), so results on other tasks will vary.</p>
-    <p class="footer"><span>TOKEN COMPARISON</span><span>10</span></p>`,
+    <p class="footer"><span>SAVINGS COMPARISON</span><span>10</span></p>`,
   () => `
     <p class="kicker" style="margin-bottom:16px">05  /  RESILIENCE  ·  WHEN THINGS FAIL</p>
     <h2 style="font-size:46px;margin:0 0 22px">When things fail, work pauses. It is never lost.</h2>
@@ -285,7 +285,7 @@ const slidesVi = [
       <div><b>01  Kiến trúc</b><span>MCP server chạy sẵn, AI agent chạy trên máy bạn.</span></div>
       <div><b>02  Key và credit</b><span>Tạo hoặc nhập key, các gói, credit cho từng thao tác.</span></div>
       <div><b>03  Quy trình Jira</b><span>Bước duyệt, ai quyết việc gì, flow riêng, flow theo task, /task add, /task split, /company set auto-pr.</span></div>
-      <div><b>04  Cài đặt và token</b><span>/jira setup, Keychain, listener, /doctor và số token tiết kiệm được.</span></div>
+      <div><b>04  Cài đặt và tiết kiệm</b><span>/jira setup, Keychain, listener, /doctor và mức tiết kiệm đo được.</span></div>
     </div>
     <p class="footer"><span>AGENTS HOLDING</span><span>01</span></p>`,
   () => `
@@ -296,7 +296,7 @@ const slidesVi = [
       <div class="block"><span class="idx">Mac</span><h3>AI agent trên máy bạn</h3><p>Jira Listener nhận thông báo rồi chạy agent CLI ngay trong repo. Git, đọc Jira, comment, chuyển thẻ đều do script làm. Model chỉ viết plan và code, trả về JSON.</p></div>
       <div class="block"><span class="idx">Jira</span><h3>Board Jira là giao diện</h3><p>Bạn kéo thẻ và comment. Agent trả lời bằng comment <span class="mono">[agents-holding]</span> và tự chuyển thẻ khi xong việc.</p></div>
     </div>
-    <p class="note">Code không bao giờ rời khỏi máy bạn. Server chỉ thấy tiêu đề, kết quả từng bước và số token.</p>
+    <p class="note">Code không bao giờ rời khỏi máy bạn. Server chỉ thấy tiêu đề, kết quả từng bước và số credit đã dùng.</p>
     <p class="footer"><span>KIẾN TRÚC</span><span>02</span></p>`,
   () => `
     <p class="kicker">02  /  KEY</p>
@@ -311,7 +311,7 @@ const slidesVi = [
     <p class="footer"><span>KEY</span><span>03</span></p>`,
   () => `
     <p class="kicker">02  /  CREDIT</p>
-    <h2>Tính tiền theo thao tác, không theo token.</h2>
+    <h2>Tính tiền theo thao tác, bằng credit.</h2>
     <style>.cr td,.cr th{padding:5px 0!important;font-size:20px!important}.cr th{font-size:13px!important}</style><table class="cr">
       <thead><tr><th>GÓI</th><th>CREDIT / THÁNG</th><th>GÓI</th><th>CREDIT / THÁNG</th></tr></thead>
       <tbody>
@@ -366,11 +366,11 @@ const slidesVi = [
   () => `
     <p class="kicker">03  /  LỆNH</p>
     <h2>Bắt đầu từ một câu, kết thúc bằng một PR (nếu bạn muốn).</h2>
-    <div class="launch"><p class="cmd">/task add thêm nút reset cho bộ đếm</p><p>Staff viết thành issue Jira đầy đủ, để ở To Do. Bạn kéo thẻ thì mới chạy.</p></div>
-    <div class="launch"><p class="cmd">/task split KAN-12</p><p>Tách issue lớn thành nhiều sub-task ở To Do, mỗi cái một flow riêng.</p></div>
+    <div class="launch"><p class="cmd">/task add thêm nút reset  ·  /task split KAN-12</p><p>Staff viết thành issue Jira đầy đủ ở To Do (bạn kéo thẻ thì mới chạy), hoặc tách issue lớn thành sub-task.</p></div>
     <div class="launch"><p class="cmd">/company set auto-pr on</p><p>Mặc định tắt, bật theo từng công ty. Khi bật, tới In Review agent push branch và mở PR bằng <span class="mono">gh</span>; bước merge chạy <span class="mono">gh pr merge</span>, không bao giờ ép merge. Khi tắt, branch chỉ nằm trên máy.</p></div>
-    <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Xem token theo task và từng bước, task đang mở, plan và duyệt, ngay trong agent của bạn.</p></div>
+    <div class="launch"><p class="cmd">/billing usage  ·  /task list  ·  /task plan KAN-1  ·  /approve KAN-1</p><p>Xem credit theo task và từng bước, task đang mở, plan và duyệt, ngay trong agent của bạn.</p></div>
     <div class="launch"><p class="cmd">holding status  ·  holding inbox list  ·  holding inbox dismiss &lt;id&gt;</p><p>Status cho biết CEO inbox còn bao nhiêu việc chờ bạn. Trả lời bằng <span class="mono">holding inbox reply &lt;id&gt; &lt;câu trả lời&gt;</span>, hoặc đóng luôn nếu không cần trả lời.</p></div>
+    <div class="launch"><p class="cmd">/ceo companies  ·  holding company show|create|pause|archive|link|config|migrate</p><p>Mọi công ty trong holding (con nằm dưới mẹ): trạng thái, nhân sự, Jira, task, credit.</p></div>
     <p class="footer"><span>LỆNH</span><span>08</span></p>`,
   () => `
     <p class="kicker">04  /  CÀI ĐẶT</p>
@@ -378,7 +378,7 @@ const slidesVi = [
     <div class="steps">
       <div class="step"><b>1  /jira setup KAN</b><span>Đọc board qua Atlassian MCP của bạn, rồi mở trang cài đặt có sẵn cột, link và trạng thái.</span></div>
       <div class="step"><b>2  Jira Listener</b><span><b>Jira Listener là thứ giữ cho toàn bộ automation trên Jira chạy được.</b> Trong phần cài đặt hệ thống của Jira, thêm URL Jira Listener ở trang cài đặt (có <span class="mono">?s=…&amp;token=…</span>). JQL <span class="mono">project = KAN</span>. Sự kiện: tạo/cập nhật issue, tạo comment. Luôn bật: <span class="mono">holding listener start &amp;&amp; holding listener autostart on</span>.</span></div>
-      <div class="step"><b>3  Token vào Keychain</b><span><span class="mono">holding jira connect &lt;site&gt; &lt;email&gt;</span> hỏi API token (gõ ẩn) và chỉ lưu trong macOS Keychain.</span></div>
+      <div class="step"><b>3  Lưu vào Keychain</b><span><span class="mono">holding jira connect &lt;site&gt; &lt;email&gt;</span> hỏi API token (gõ ẩn) và chỉ lưu trong macOS Keychain.</span></div>
       <div class="step"><b>4  Sắp xếp cột</b><span>Script tự tạo các status còn thiếu. Bạn kéo các cột theo thứ tự, để Done cuối cùng, vì Jira không có API đổi thứ tự cột.</span></div>
     </div>
     <div class="term" style="margin-top:34px">
@@ -392,10 +392,10 @@ const slidesVi = [
     </div>
     <p class="footer"><span>CÀI ĐẶT · GIÁ TRỊ MẪU</span><span>09</span></p>`,
   () => `
-    <p class="kicker">04  /  TOKEN  ·  ĐO TRÊN KAN-1</p>
-    <h2 style="font-size:52px">Cùng một task, so token đầu vào: flow gọn còn rẻ hơn hỏi thẳng.</h2>
+    <p class="kicker">04  /  TIẾT KIỆM  ·  ĐO TRÊN KAN-1</p>
+    <h2 style="font-size:52px">Cùng một task, prompt ngắn hơn: flow gọn tốn ít credit model hơn hỏi thẳng.</h2>
     <table>
-      <thead><tr><th>CÁCH LÀM KAN-1</th><th>TOKEN ĐẦU VÀO</th><th>SO VỚI HỎI THẲNG</th></tr></thead>
+      <thead><tr><th>CÁCH LÀM KAN-1</th><th>CỠ PROMPT</th><th>SO VỚI HỎI THẲNG</th></tr></thead>
       <tbody>
         <tr><td>Hỏi thẳng (một lần chat)</td><td class="n">190,842</td><td class="n">1.00×</td></tr>
         <tr><td>Flow Jira, chưa tối ưu</td><td class="n">3,022,094</td><td class="n">15.8×</td></tr>
@@ -405,7 +405,7 @@ const slidesVi = [
     </table>
     <p class="dim" style="font-size:23px;margin-top:22px">Flow gọn để script lo Jira, git và comment, dùng model rẻ cho bước lên plan, và chỉ gọi model code một lần, không gắn MCP server nào. Done, chuyển thẻ và merge không tốn lần gọi model nào.</p>
     <p class="note" style="bottom:70px;font-size:18px">Số liệu đo trên một task mẫu (KAN-1), task khác sẽ khác.</p>
-    <p class="footer"><span>SO SÁNH TOKEN</span><span>10</span></p>`,
+    <p class="footer"><span>SO SÁNH TIẾT KIỆM</span><span>10</span></p>`,
   () => `
     <p class="kicker" style="margin-bottom:16px">05  /  KHI CÓ SỰ CỐ</p>
     <h2 style="font-size:46px;margin:0 0 22px">Có sự cố thì việc tạm dừng, chứ không bao giờ mất.</h2>
